@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+	{% if found_decks and search_query %}
+	{# @TODO This title casing is probably weak #}
+	<h1 class="pad">{%blocktrans with search_query|title as search_query%}Decks Related to &ldquo;{{search_query}}&rdquo;{%endblocktrans%}</h1>
+	
+	<ul class="grid two-col animate">
+		{% for deck in found_decks %}
+		{% include 'modules/deck.html' %}
+		{% endfor %}
+	</ul>
+	{% endif %}
+	{% if search_query and not found_decks %}
+	<h1 class="pad">{%blocktrans with search_query|title as search_query%}Sorry, I Found No Decks For &ldquo;{{search_query}}&rdquo;{%endblocktrans%}</h1>
+	{% endif %}
+	{% if not search_query %}
+	<h1 class="pad">{% trans "You Didn't Search For Anything!" %}</h1>
+	<p class="pad s-text">{% trans "If you're unsure what to search for, you could try looking through the most popular decks:" %}</p>
+	<ul class="grid two-col animate">
+		{% for deck in popular_decks %}
+		{% include 'modules/deck.html' %}
+		{% endfor %}
+	</ul>
+	{% endif %}
+{% endblock %}

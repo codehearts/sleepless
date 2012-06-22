@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+	<section id="intro" class="six-col pad center-align">
+		<h1 class="loose-tracking">{% blocktrans %}Sleepless is a no-nonsense way to study the things that matter to you.{% endblocktrans %}</h1>
+		<p>{% blocktrans %}What interests you? Try searching through the library of public decks and start studying&mdash;no registration required.{% endblocktrans %}</p>
+	</section>
+	{% if popular_decks %}
+	<p class="pad s-text slow-fade-in">{% trans 'To get you started, here are some of the most popular decks:' %}</p>
+	<ul class="grid two-col animate animate-defer">
+		{% for deck in popular_decks %}
+		{% include 'modules/deck.html' %}
+		{% endfor %}
+	</ul>
+	{% endif %}
+{% endblock %}

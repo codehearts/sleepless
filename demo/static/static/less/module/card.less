@@ -1,0 +1,56 @@
+.card-front {
+	border-bottom: 1px solid @dark_grey;
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+	display: block;
+}
+
+.orgiami-content> .card-front,
+.paper> .card-front {
+	border-color: darken(@light_grey, 20%);
+}
+
+
+
+.card-field {
+	margin-bottom: 5px;
+	display: block;
+	line-height: 1.1;
+	overflow: hidden;
+	
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.center-field {
+	text-align: center;
+}
+
+.right-align-field {
+	text-align: right;
+}
+
+
+
+.completed-card {
+	background: @green;
+	border-color: darken(@green, 15%);
+	color: darken(@green, 35%);
+	
+	&.origami-content> .card-front,
+	&.paper> .card-front {
+		border-color: darken(@green, 10%);
+	}
+}
+
+.upcoming-card {
+	background: @blue;
+	border-color: darken(@blue, 15%);
+	color: darken(@blue, 45%);
+	
+	&.origami-content> .card-front,
+	&.paper> .card-front {
+		border-color: darken(@blue, 20%);
+	}
+}

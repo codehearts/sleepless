@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+	<header class="six-col pad right-align desc-hd" id="launch-header">
+		<h1>{{ deck.name }}</h1>
+		<p class="desc-shd">{{ deck.description }}</p>
+	</header>
+	
+	<ul class="sidebar" id="launch-sidebar">
+		<li>
+			<div class="origami">
+				<div class="origami-header">
+					<img class="origami-image" src="{{ MEDIA_URL }}{{ deck.thumbnail }}" alt="" />
+				</div>
+				<div class="origami-footer">
+					<p class="origami-caption">
+						{% blocktrans with '/'|add:deck.author.name|add:'/'|lower as author_url and deck.author.name as author_name %}By <a href="{{ author_url }}" title="See more decks by {{ author_name }}">{{ author_name }}</a>{% endblocktrans %}
+					</p>
+				</div>
+			</div>
+		</li>
+		<li>
+			<a href="/{{ deck.author.name|lower }}/{{ deck.slug }}/cards/" title="{% trans "See all cards in this deck" %}">
+			{%blocktrans count card_count as card_count%}{{card_count}} card{%plural%}{{card_count}} cards{%endblocktrans%}
+			</a>
+		</li>
+		{% if tags %}
+		<li>
+			<p>{% trans "Tags:" %}</p>
+			<ul class="tags">
+			{% for tag in tags %}
+				<li><a href="/tags/{{tag.name}}" title="{%blocktrans with tag.name as tag_name%}See more decks tagged {{tag_name}}{%endblocktrans%}">{{tag.name}}</a>{%if not forloop.last%}, {%endif%}</li>
+			{% endfor %}
+			</ul>
+		</li>
+		{% endif %}
+	</ul>
+	
+	<form method="post" action="question.php" class="options six-col right-align" id="launch-form">
+		<span class="input-btn large-btn go-btn"><input type="submit" name="start-studying" value="{% trans "Start Studying" %}" /></span>
+		
+		<h2 class="subhead pad">{% trans "Study Options" %}</h2>
+		
+		<!--<div class="three-col-cell right-align">
+			<div class="box check-box attention-box">
+				<label class="box-shd">
+				{%blocktrans with '<input type="checkbox" name="record" />' as checkbox%}{{checkbox}} Record your progress?{%endblocktrans%}
+				</label>
+				<p class="box-bd">{% trans "Sleepless can record your progress in this deck for next time. As a guest, your progress will not be available on other devices." %}</p>
+			</div>
+			<p class="pad option-text">
+			{%blocktrans count 27 as cards_to_study%}You have {{cards_to_study}} card to study today.{%plural%}You have {{cards_to_study}} cards to study today.{%endblocktrans%}
+			</p>
+		</div>-->
+		
+		<div class="three-col-cell pad option-group">
+			<label class="small-text-option">
+			{%blocktrans with '<input type="number" min="0" max="'|add:'1274'|add:'" name="card-count" value="20" />' as numeric_box%}{{numeric_box}} new cards to study{%endblocktrans%}
+			</label>
+			<label class="sub-option checkbox-option">
+			{%blocktrans with '<input type="checkbox" name="continue" />' as checkbox%}{{checkbox}} Continue from where I left off{%endblocktrans%}
+			</label>
+			
+			<label class="checkbox-option">
+			{%blocktrans with '<input type="checkbox" name="use-time" />' as checkbox%}{{checkbox}} Set a time limit for this session{%endblocktrans%}
+			</label>
+			<label class="sub-option small-text-option">
+			{%blocktrans with '<input type="number" min="0" name="time-limit" value="10" />' as numeric_box%}{{numeric_box}} minutes{%endblocktrans%}
+			</label>
+			
+			<label class="checkbox-option">
+			{%blocktrans with '<input type="checkbox" name="randomize" />' as checkbox%}{{checkbox}} Randomize order{%endblocktrans%}
+			</label>
+			
+			<label class="checkbox-option">
+			{%blocktrans with '<input type="checkbox" name="use-reverse" />' as checkbox%}{{checkbox}} Include reversed cards{%endblocktrans%}
+			</label>
+		</div>
+	</form>
+{% endblock %}

@@ -1,0 +1,96 @@
+/* Helper methods */
+.font_size(@size) {
+	@rem: @size / @base_font_size;
+	font-size: ~'@{size}px';
+	font-size: ~'@{rem}rem';
+}
+
+.linear_gradient(@value) {
+	background-image: -webkit-linear-gradient(@value);
+	background-image: -moz-linear-gradient(@value);
+	background-image: -o-linear-gradient(@value);
+	background-image: -ms-linear-gradient(@value);
+	background-image: linear-gradient(@value);
+}
+
+.animation(@value) {
+	-webkit-animation: @value;
+	-moz-animation: @value;
+	-o-animation: @value;
+	animation: @value;
+}
+
+.transition(@value) {
+	-webkit-transition: @value;
+	-moz-transition: @value;
+	-o-transition: @value;
+	transition: @value;
+}
+
+.transition_property(@value) {
+	-webkit-transition-property: @value;
+	-moz-transition-property: @value;
+	-o-transition-property: @value;
+	transition-property: @value;
+}
+
+.transition_duration(@value) {
+	-webkit-transition-duration: @value;
+	-moz-transition-duration: @value;
+	-o-transition-duration: @value;
+	transition-duration: @value;
+}
+
+.transform(@value) {
+	-webkit-transform: @value;
+	-moz-transform: @value;
+	-o-transform: @value;
+	transform: @value;
+}
+
+.box_sizing(@value) {
+	-moz-box-sizing: @value;
+	-webkit-box-sizing: @value;
+	box-sizing: @value;
+}
+
+.hyphens(@value) {
+	-webkit-hyphens: @value;
+	-moz-hyphens: @value;
+	-ms-hyphens: @value;
+	hyphens: @value;
+}
+
+.no_select() {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.no_drag() {
+	-moz-user-drag: none;
+	-webkit-user-drag: none;
+	user-drag: none;
+}
+
+
+
+/* Reusable styles */
+.paper_box_shadow() {
+	box-shadow: 2px 2px 4px rgba(0,0,0,0.085);
+}
+
+
+
+/* IE Crutches */
+
+.ie7_inline_block() {
+	display: inline;
+	zoom: 1;
+}
+
+
+
+@import 'anime';
+@import 'color';
+@import 'type';

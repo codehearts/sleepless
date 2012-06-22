@@ -1,0 +1,125 @@
+#front, #back {
+	position: absolute;
+	left: 5/320*100%;
+}
+
+#front {
+	border-bottom: 1px solid @light_grey;
+	.transition(color 0.25s ease);
+	margin: 0;
+	padding: 0 5/300*100%;
+	top: 55px;
+	bottom: 50%;
+	.l3-font-size;
+	color: @dark_grey;
+	width: 100-(10/310*200%);
+	overflow: auto;
+	
+	&> .card-front {
+		border: 0;
+		margin: 0;
+		padding: 0;
+		display: inline-block;
+		left: 0;
+		vertical-align: middle;
+		width: 100%;
+	}
+	
+	&.is-muted {
+		color: @grey;
+	}
+}
+
+#back {
+	top: 50%;
+	bottom: 0;
+	overflow: visible;
+	width: 100-(5/320*200%);
+	
+	&> .card {
+		padding: 5px 5/310*100% 0;
+		position: absolute;
+		top: 0;
+		bottom: 125px;
+		overflow: auto;
+		color: @dark_grey;
+		width: 300/310*100%;
+		
+		&> .card-back {
+			min-height: 100%;
+		}
+	}
+}
+
+#study-show-answer {
+	background: none;
+	margin: 40px auto 0;
+	display: block;
+}
+
+.study-levels {
+	margin-left: -5/320*100%;
+	position: absolute;
+	bottom: 27px;
+	overflow: hidden;
+	width: 320/310*100%;
+	
+	&> input {
+		margin: 0;
+		float: left;
+		position: relative;
+		.l2-font-size;
+		font-weight: normal;
+		height: 49px;
+		width: 50%;
+	}
+}
+
+#study-l1,
+#study-l2 {
+	&:hover, &:focus {
+		background: @dark_grey;
+		color: #fff;
+	}
+}
+
+#study-l0 {
+	top: 49px;
+	left: 50%;
+}
+
+#study-l1 {
+	background-color: fadeout(@green, 50%);
+	top: 49px;
+	right: 50%;
+}
+
+#study-l2 {
+	background-color: fadeout(@green, 25%);
+	bottom: 49px;
+}
+
+#study-l3 {
+	bottom: 49px;
+}
+
+.study-status {
+	position: absolute;
+	bottom: 5px;
+	left: 0;
+}
+
+.study-repeats {
+	color: @red;
+}
+
+
+
+/* IE Fixes */
+.lt-ie8 {
+	#front {
+		&> .card-front {
+			.ie7_inline_block;
+		}
+	}
+}

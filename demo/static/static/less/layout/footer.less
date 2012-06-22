@@ -1,0 +1,66 @@
+#footer {
+	margin-top: 25px;
+	margin-bottom: 20px;
+	clear: both;
+	.s-font-size;
+	
+	&> p {
+		.transition(color 0.25s ease);
+		margin-bottom: 0;
+		display: inline-block;
+		color: @light_grey;
+		
+		&> a {
+			.transition(color 0.25s ease);
+			color: @light_grey;
+		}
+	}
+	
+	&:hover {
+		&> p,
+		&> #language-form {
+			color: @grey;
+		}
+		
+		& a,
+		&> #language-form > button {
+			color: @dark_grey;
+		}
+	}
+}
+
+#language-form {
+	display: inline;
+	color: @light_grey;
+	
+	&> button {
+		background: none;
+		border: none;
+		.transition(color 0.25s ease);
+		padding: 0;
+		cursor: pointer;
+		display: inline;
+		.s-font-size;
+		color: @light_grey;
+		
+		&:hover {
+			text-decoration: underline;
+		}
+		
+		/* Remove extra padding added by Firefox */
+		&::-moz-focus-inner {
+			padding: 0;
+			border: 0
+		}
+	}
+}
+
+
+
+/* IE Fixes */
+
+.lt-ie8 #footer {
+	&> p {
+		.ie7_inline_block;
+	}
+}

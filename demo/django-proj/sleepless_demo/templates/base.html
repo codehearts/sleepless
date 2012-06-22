@@ -1,0 +1,66 @@
+{% load i18n %}{% get_current_language as LANGUAGE_CODE %}{% get_available_languages as LANGUAGES %}<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="{{ LANGUAGE_CODE }}"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="{{ LANGUAGE_CODE }}"><![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="{{ LANGUAGE_CODE }}"><![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="{{ LANGUAGE_CODE }}"><!--<![endif]-->
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
+	<title>{{ title|safe }}</title>
+	
+	<script>
+		var h = document.documentElement;
+		h.className = h.className.substring(3);
+	</script>
+	
+	<script src="{{ STATIC_URL }}js/modernizr.js"></script>
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/main.css" media="all" />
+	<!--[if lt IE 9]><link rel="stylesheet" href="static/css/960-main.css" media="all" /><![endif]-->
+</head>
+<body class="{{ body_class }}">
+	<div id="toolbar" {% block toolbar_class %}{% endblock %}>
+		<header id="masthead">
+		{% if show_back_button %}
+			<a href="{# @TODO Output this link #}" class="btn back-btn">{% trans "Back to Deck" %}</a>
+		{% endif %}
+		{% if show_back_cancel_button %}
+			<a href="{# @TODO Output this link #}" class="btn back-btn cancel-btn">{% trans "Back to Deck" %}</a>
+		{% endif %}
+			<h1 id="main-branding"><a href="/" class="logotype">Sleepless</a></h1>
+		{% block searchbox %}
+			<form method="get" action="/search/" class="combo-field">
+				<input type="submit" value="{% trans "Search Decks" %}" class="btn combo-field-btn" />
+				<span class="combo-field-wrap"><input type="text" name="for" tabindex="1" class="combo-field-text" value="{{search_query}}" /></span>
+			</form>
+		{% endblock %}
+		</header>
+	</div>
+	<div id="wrap">
+		{% block content %}{% endblock %}
+	</div>
+{% block footer %}
+	<footer id="footer" class="center-text eight-col center-align">
+		<p>
+			&copy; <a href="http://iamnatehart.com">Nate Hart</a> &mdash;
+			{% trans 'Change Language:' %}
+		</p>
+		<form action="/i18n/setlang/" method="post" id="language-form">
+			{% csrf_token %}
+			<input name="next" type="hidden" value="{{ request.get_full_path }}" />
+			
+			{% for lang_code, lang_name in LANGUAGES %}
+			<button title="{% language lang_code %}{% trans "Use Sleepless in English" %}{% endlanguage %}" name="language" value="{{ lang_code }}">{{ lang_name }}</button>{% if not forloop.last %}, {% endif %}
+			{% endfor %}
+			<!--<button title="השתמש Sleepless עברית" name="language" value="he">עברית</button>-->
+		</form>
+	</footer>
+{% endblock %}
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	{% block extra_scripts %}{% endblock %}
+	<script src="{{ STATIC_URL }}js/anime.min.js"></script>
+</body>
+</html>
