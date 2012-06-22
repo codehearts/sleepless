@@ -23,7 +23,13 @@ def search(request):
 	
 	if query:
 		queried_tags = Tags.objects.filter(name__ilike='%'+query+'%')
-		tag_related_decks = [deck.deck for deck in Deck_Tags.objects.filter(tag=queried_tags).select_related('deck')]
+		print queried_tags
+		
+		if queried_tags:
+			tags_query = reduce(lambda q, value: q|Q(tag=value), queried_tags, Q())  
+			tag_related_decks = [tagged_deck.deck for tagged_deck in Deck_Tags.objects.filter(tags_query).select_related('deck')]
+		else:
+			tag_related_decks = []
 		
 		name_related_decks = Deck.objects.filter(Q(name__ilike='%'+query+'%') | Q(summary__ilike='%'+query+'%'))
 		
