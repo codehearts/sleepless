@@ -14,8 +14,10 @@
 		</p>
 	</footer>
 <?php endif; ?>
-	
+
+<?php if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest'): ?>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script>!window.jQuery && document.write(unescape('%3Cscript src="static/js/min/jquery-1.7.2.min.js"%3E%3C/script%3E'))</script>
 <?php if ($page === 'study' || $page === 'listing'): ?>
 	<script src="static/js/jquery.fittext.js"></script>
 	<script src="static/js/cards.js"></script>
@@ -26,5 +28,7 @@
 <?php endif;?>
 	<script src="static/js/anime.js"></script>
 	<script src="static/js/jquery.inview.js"></script>
+	<script src="static/js/main.js"></script>
+<?php endif; ?>
 </body>
 </html>

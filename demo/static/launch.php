@@ -5,11 +5,11 @@
 		<p class="desc-shd">Various words and phrases in Swedish with their English counterparts.</p>
 	</header>
 	
-	<ul class="sidebar" id="launch-sidebar">
+	<ul class="sidebar animate" id="launch-sidebar">
 		<li>
 			<div class="origami">
 				<div class="origami-header">
-					<img class="origami-image" src="static/images/se.png" alt="" />
+					<img class="origami-image" src="static/images/sv.png" alt="" />
 				</div>
 				<div class="origami-footer">
 					<p class="origami-caption">By <a href="author.php">Sleepless</a></p>

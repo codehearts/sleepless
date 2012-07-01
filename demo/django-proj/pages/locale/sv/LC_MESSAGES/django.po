@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-21 19:11-0500\n"
+"POT-Creation-Date: 2012-06-23 15:43-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,14 +22,19 @@ msgstr ""
 msgid "Welcome to the %(site_title)s"
 msgstr "Välkommen till %(site_title)s"
 
-#: views.py:31
+#: views.py:36
 #, python-format
 msgid "Results for &ldquo;%(search_query)s&rdquo;"
 msgstr "Sökresultat på &ldquo;%(search_query)s&rdquo;"
 
-#: views.py:34 templates/search.html:19
+#: views.py:39 templates/search.html:19
 msgid "You Didn't Search For Anything!"
 msgstr "Du har inte söka efter vad!"
+
+#: views.py:68 templates/card_listing.html:6
+#, python-format
+msgid "Cards in %(deck_name)s"
+msgstr "Kort i %(deck_name)s"
 
 #: templates/home.html:6
 msgid "Sleepless is a no-nonsense way to study the things that matter to you."
@@ -77,20 +82,20 @@ msgstr "Taggar:"
 msgid "See more decks tagged %(tag_name)s"
 msgstr "Se fler däck taggade %(tag_name)s"
 
-#: templates/launch.html:41
+#: templates/launch.html:42
 msgid "Start Studying"
 msgstr "Börja Studera"
 
-#: templates/launch.html:43
+#: templates/launch.html:44
 msgid "Study Options"
 msgstr "Studera Inställningar"
 
-#: templates/launch.html:48
+#: templates/launch.html:49
 #, python-format
 msgid "%(checkbox)s Record your progress?"
 msgstr "%(checkbox)s Anteckna dina framsteg?"
 
-#: templates/launch.html:50
+#: templates/launch.html:51
 msgid ""
 "Sleepless can record your progress in this deck for next time. As a guest, "
 "your progress will not be available on other devices."
@@ -98,39 +103,39 @@ msgstr ""
 "Sleepless kan anteckna dina framsteg i detta däck till nästa gång. Som gäst "
 "kommer dina framsteg inte tillgänglig på andra anordningar."
 
-#: templates/launch.html:53
+#: templates/launch.html:54
 #, python-format
 msgid "You have %(cards_to_study)s card to study today."
 msgid_plural "You have %(cards_to_study)s cards to study today."
 msgstr[0] "Du har %(cards_to_study)s kort för att studera idag."
 msgstr[1] "Du har %(cards_to_study)s kort att studera idag."
 
-#: templates/launch.html:59
+#: templates/launch.html:60
 #, python-format
 msgid "%(numeric_box)s new cards to study"
 msgstr "%(numeric_box)s nya kort att studera"
 
-#: templates/launch.html:62
+#: templates/launch.html:63
 #, python-format
 msgid "%(checkbox)s Continue from where I left off"
 msgstr "%(checkbox)s Fortsätt där jag slutade"
 
-#: templates/launch.html:66
+#: templates/launch.html:67
 #, python-format
 msgid "%(checkbox)s Set a time limit for this session"
 msgstr "%(checkbox)s Fastställa en tidsfrist för denna session"
 
-#: templates/launch.html:69
+#: templates/launch.html:70
 #, python-format
 msgid "%(numeric_box)s minutes"
 msgstr "%(numeric_box)s minuter"
 
-#: templates/launch.html:73
+#: templates/launch.html:74
 #, python-format
 msgid "%(checkbox)s Randomize order"
 msgstr "%(checkbox)s Randomisera ordning"
 
-#: templates/launch.html:77
+#: templates/launch.html:78
 #, python-format
 msgid "%(checkbox)s Include reversed cards"
 msgstr "%(checkbox)s Inkludera omvända kort"

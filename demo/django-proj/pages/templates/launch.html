@@ -7,7 +7,7 @@
 		<p class="desc-shd">{{ deck.description }}</p>
 	</header>
 	
-	<ul class="sidebar" id="launch-sidebar">
+	<ul class="sidebar animate" id="launch-sidebar">
 		<li>
 			<div class="origami">
 				<div class="origami-header">
@@ -15,13 +15,13 @@
 				</div>
 				<div class="origami-footer">
 					<p class="origami-caption">
-						{% blocktrans with '/'|add:deck.author.name|add:'/'|lower as author_url and deck.author.name as author_name %}By <a href="{{ author_url }}" title="See more decks by {{ author_name }}">{{ author_name }}</a>{% endblocktrans %}
+						{% blocktrans with '/author/'|add:deck.author.name|add:'/'|lower as author_url and deck.author.name as author_name %}By <a href="{{ author_url }}" title="See more decks by {{ author_name }}">{{ author_name }}</a>{% endblocktrans %}
 					</p>
 				</div>
 			</div>
 		</li>
 		<li>
-			<a href="/{{ deck.author.name|lower }}/{{ deck.slug }}/cards/" title="{% trans "See all cards in this deck" %}">
+			<a href="/author/{{deck.author.name|lower}}/deck/{{deck.slug}}/cards/" title="{% trans "See all cards in this deck" %}">
 			{%blocktrans count card_count as card_count%}{{card_count}} card{%plural%}{{card_count}} cards{%endblocktrans%}
 			</a>
 		</li>
@@ -37,7 +37,8 @@
 		{% endif %}
 	</ul>
 	
-	<form method="post" action="question.php" class="options six-col right-align" id="launch-form">
+	<form method="post" action="/author/{{deck.author.name|lower}}/deck/{{deck.slug}}/study/" class="options six-col right-align" id="launch-form">
+		{% csrf_token %}
 		<span class="input-btn large-btn go-btn"><input type="submit" name="start-studying" value="{% trans "Start Studying" %}" /></span>
 		
 		<h2 class="subhead pad">{% trans "Study Options" %}</h2>
@@ -58,9 +59,9 @@
 			<label class="small-text-option">
 			{%blocktrans with '<input type="number" min="0" max="'|add:'1274'|add:'" name="card-count" value="20" />' as numeric_box%}{{numeric_box}} new cards to study{%endblocktrans%}
 			</label>
-			<label class="sub-option checkbox-option">
+			<!--<label class="sub-option checkbox-option">
 			{%blocktrans with '<input type="checkbox" name="continue" />' as checkbox%}{{checkbox}} Continue from where I left off{%endblocktrans%}
-			</label>
+			</label>-->
 			
 			<label class="checkbox-option">
 			{%blocktrans with '<input type="checkbox" name="use-time" />' as checkbox%}{{checkbox}} Set a time limit for this session{%endblocktrans%}

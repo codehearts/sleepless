@@ -16,13 +16,30 @@ html, body, textarea, input, button {
 
 html, body {
 	background: #fff;
+	min-height: 100%;
 }
 
 html {
 	overflow-y: scroll;
+	height: 100%;
 }
 
-#wrap {
+body {
+	.hardware-accelerate;
+	.transition(background-position 1s ease);
+}
+
+#wrap,
+#old-wrap {
+	.hardware-accelerate;
+	.transition(all 0.75s ease);
+	.transition_property(opacity~',' height);
+	
+	.study-page & {
+		position: absolute;
+		top: 55px;
+	}
+	
 	&:after {
 		content: '';
 		display: block;
@@ -34,7 +51,11 @@ html {
 }
 
 .home-page {
-	background: #fff url('../images/background/mural.png') top center no-repeat;
+	background: #fff url('../images/background/mural.png') center 100px no-repeat;
+	
+	.js & {
+		background-position: center -500px;
+	}
 }
 
 
@@ -78,6 +99,10 @@ input {
 }
 
 
+
+.no-transition {
+	.transition_duration(0 ~'!important');
+}
 
 .hide {
 	position: absolute !important;

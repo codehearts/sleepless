@@ -11,10 +11,10 @@
 	text-align: center;
 	.s-font-size;
 	font-weight: bold;
-	line-height: 29px;
+	line-height: 28px;
 	color: @grey;
 	vertical-align: middle;
-	height: 29px;
+	height: 28px;
 	min-width: 60px;
 	
 	.is-muted & {
@@ -37,15 +37,15 @@
 .input-btn.large-btn,
 .input-btn.large-btn> input {
 	.transition_duration(0.225s);
-	padding: 4px 10px;
-	.font_size(32);
-	line-height: 41px;
-	height: 41px;
+	padding: 4px 20px;
+	.font_size(28);
+	line-height: 42px;
+	height: 42px;
 }
 
 .input-btn.large-btn,
 .input-btn.large-btn> input {
-	height: 49px;
+	height: 50px;
 }
 
 .input-btn.large-btn {
@@ -98,46 +98,42 @@
 
 
 .go-btn {
-	margin-right: 15px;
-	padding-right: 8px;
+	margin-right: 14px;
+	padding-right: 7px;
 	
 	&:before {
-		border-style: inherit;
-		border-color: transparent;
+		border: 14px solid transparent;
 		border-left-color: inherit;
-		border-width: 14px;
 		content: '';
 		position: absolute;
-		top: 1px;
+		top: 0;
 		right: -28px;
 	}
 	
 	&.large-btn:before {
-		border-width: 24px;
-		right: -48px;
+		border-width: 25px;
+		right: -50px;
 	}
 }
 
 .back-btn {
-	margin-left: 15px;
+	margin-left: 14px;
 	padding-left: 7px;
 	
 	&:before {
-		border-style: inherit;
-		border-color: transparent;
+		border: 14px solid transparent;
 		border-right-color: inherit;
-		border-width: 15px;
 		content: '';
 		position: absolute;
-		top: -1px;
-		left: -30px;
+		top: 0;
+		left: -28px;
 		height: 0;
 		width: 0;
 	}
 	
 	&.large-btn:before {
-		border-width: 24px;
-		left: -48px;
+		border-width: 25px;
+		left: -50px;
 	}
 }
 

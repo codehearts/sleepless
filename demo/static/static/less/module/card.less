@@ -5,9 +5,10 @@
 	display: block;
 }
 
-.orgiami-content> .card-front,
+.origami-content> .card-front,
 .paper> .card-front {
-	border-color: darken(@light_grey, 20%);
+	border-color: darken(@light_grey, 10%);
+	border-bottom-color: rgba(0,0,0,0.15);
 }
 
 
@@ -34,23 +35,25 @@
 
 
 .completed-card {
-	background: @green;
-	border-color: darken(@green, 15%);
-	color: darken(@green, 35%);
+	.paper-green-background;
+	border-bottom-color: darken(@green, 7.5%);
+	color: darken(@green, 30%);
 	
 	&.origami-content> .card-front,
 	&.paper> .card-front {
-		border-color: darken(@green, 10%);
+		border-bottom-color: darken(@green, 7.5%);
+		border-bottom-color: rgba(0,0,0,0.175);
 	}
 }
 
 .upcoming-card {
-	background: @blue;
-	border-color: darken(@blue, 15%);
+	.paper-blue-background;
+	border-bottom-color: darken(@blue, 15%);
 	color: darken(@blue, 45%);
 	
 	&.origami-content> .card-front,
 	&.paper> .card-front {
-		border-color: darken(@blue, 20%);
+		border-bottom-color: darken(@blue, 15%);
+		border-bottom-color: rgba(0,0,0,0.15);
 	}
 }

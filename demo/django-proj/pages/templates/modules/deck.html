@@ -2,15 +2,15 @@
 		<li class="origami deck discovery-deck">
 			<header class="origami-header">
 				<div class="origami-content">
-					<a href="/{{ deck.author.name|lower }}/{{ deck.slug }}/"><h2 class="origami-hd">{{ deck.name }}</h2></a>
+					<a href="/author/{{deck.author.name|lower}}/deck/{{deck.slug}}/"><h2 class="origami-hd">{{ deck.name }}</h2></a>
 					<p class="origami-bd">{{ deck.summary }}</p>
-					<a href="/{{ deck.author.name|lower }}/{{ deck.slug }}/" class="deck-see-more">{% trans "See more" %}.</a>
+					<a href="/author/{{deck.author.name|lower}}/deck/{{deck.slug}}/" class="deck-see-more">{% trans "See more" %}.</a>
 				</div>
 			</header>
 			<footer class="origami-footer">
 				<p class="origami-caption">
-				{% blocktrans with '/'|add:deck.author.name|add:'/'|lower as author_url and deck.author.name as author_name %}By <a href="{{ author_url }}" title="See more decks by {{ author_name }}">{{ author_name }}</a>{% endblocktrans %}
+				{% blocktrans with '/author/'|add:deck.author.name|add:'/'|lower as author_url and deck.author.name as author_name %}By <a href="{{ author_url }}" title="See more decks by {{ author_name }}">{{ author_name }}</a>{% endblocktrans %}
 				</p>
-				<a href="/{{ deck.author.name|lower }}/{{ deck.slug }}/study/" class="btn go-btn">{% trans "Study Deck" %}</a>
+				<a href="/author/{{deck.author.name|lower}}/deck/{{deck.slug}}/study/" class="btn go-btn">{% trans "Study Deck" %}</a>
 			</footer>
 		</li>

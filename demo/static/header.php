@@ -11,6 +11,7 @@
 	<link rel="shortcut icon" href="favicon.ico" />
 	<title><?php echo $title; ?></title>
 	
+<?php if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest'): ?>
 	<script>
 		// Change .no-js to .js on <html>
 		var h = document.documentElement;
@@ -22,6 +23,7 @@
 	<script src="static/js/min/modernizr.js"></script>
 	<link rel="stylesheet" href="static/css/main.css" media="all" />
 	<!--[if lt IE 9]><link rel="stylesheet" href="static/css/960-main.css" media="all" /><![endif]-->
+<?php endif; ?>
 </head>
 <body class="<?php echo $body_class; ?>">
 <?php if ($body_class === 'question-page'): ?>
@@ -37,7 +39,7 @@
 <?php endif; ?>
 			<h1 id="main-branding"><a href="index.php" class="logotype">Sleepless</a></h1>
 <?php if ($body_class !== 'question-page'): ?>
-			<form method="get" action="search.php" class="combo-field">
+			<form method="get" action="search.php" class="combo-field page-transition-form">
 				<input type="submit" name="search-submit" value="Search Decks" class="btn combo-field-btn" />
 				<span class="combo-field-wrap"><input type="text" name="search" class="combo-field-text" /></span>
 			</form>

@@ -1,12 +1,14 @@
+@origami-corner-radius: 7px;
+
 .origami {
 	margin: 0 0 20px;
 	width: 100%;
 }
 
 .origami-header {
-	background: @light_grey;
+	 .paper-grey-background;
 	border: 0 solid darken(@light_grey, 20%);
-	border-top-left-radius: 4px;
+	border-top-left-radius: @origami-corner-radius;
 	position: relative;
 	color: @dark_grey;
 	
@@ -26,7 +28,7 @@
 	}
 	
 	&:after {
-		.linear_gradient(left~',' rgba(255,255,255,0.2) 0%~',' rgba(255,255,255,0) 6px);
+		.linear_gradient(left~',' rgba(255,255,255,0.25) 0%~',' rgba(255,255,255,0) 6px);
 		.paper_box_shadow;
 		top: 0;
 		right: 0;
@@ -39,8 +41,9 @@
 	border: 1px solid #efefef;
 	border-right: none;
 	border-bottom: none;
-	border-top-left-radius: 4px;
+	border-top-left-radius: @origami-corner-radius;
 	display: block;
+	max-height: 100%;
 	max-width: 100%;
 }
 

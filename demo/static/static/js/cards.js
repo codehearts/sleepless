@@ -5,7 +5,7 @@
 		/**
 		* Adjusts the size of the text on the card face depending on the size of its contents.
 		*/
-		adjustCardText = function(side) {
+		exponentiallyAdjustCardText = function(side) {
 			var children = side.children(),
 				childCount = children.length,
 				
@@ -64,6 +64,24 @@
 				}
 				
 				child.fitText(fontCompression, {minFontSize: minFont+'px', maxFontSize: maxFont+'px'});
+			});
+		},
+		
+		
+		/**
+		* Adjusts the size of the text on the card face depending on the size of its container.
+		*/
+		adjustCardText = function(side) {
+			var children = side.children(),
+				parent = side.parent(),
+				ratio = (parent.width() - 460) / 300;
+			
+			// Adjust each field on the card
+			children.each(function(i, child) {
+				child = $(child),
+				fontSize = parseInt(child.css('font-size'), 10);
+				
+				child.css('font-size', fontSize+(fontSize*ratio));
 			});
 		};
 	
