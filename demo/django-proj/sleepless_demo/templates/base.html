@@ -1,9 +1,9 @@
 {# @TODO {% spaceless %} #}
-{% load i18n %}{% get_current_language as LANGUAGE_CODE %}{% get_available_languages as LANGUAGES %}<!DOCTYPE html>
+{% load i18n %}{% get_current_language as LANGUAGE_CODE %}{% get_available_languages as LANGUAGES %}{% if not request.is_ajax %}<!DOCTYPE html>
 <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="{{ LANGUAGE_CODE }}"><![endif]-->
 <!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="{{ LANGUAGE_CODE }}"><![endif]-->
 <!--[if IE 8]><html class="no-js lt-ie9" lang="{{ LANGUAGE_CODE }}"><![endif]-->
-<!--[if gt IE 8]><!--><html class="no-js" lang="{{ LANGUAGE_CODE }}"><!--<![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="{{ LANGUAGE_CODE }}"><!--<![endif]-->{% endif %}
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,22 +26,22 @@
 	<div id="toolbar" class="{{toolbar_class}}">
 		<header id="masthead">
 		{% if back_to_deck %}
-			<a href="/author/{{author_slug}}/deck/{{deck.slug}}/" class="btn back-btn">{% trans "Back to Deck" %}</a>
+			<a href="/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/" class="btn back-btn page-transition-button">{% trans "Back to Deck" %}</a>
 		{% endif %}
 		{% if cancel_back_to_deck %}
-			<a href="/author/{{author_slug}}/deck/{{deck.slug}}/" class="btn back-btn cancel-btn">{% trans "Back to Deck" %}</a>
+			<a href="/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/" class="btn back-btn cancel-btn page-transition-button">{% trans "Back to Deck" %}</a>
 		{% endif %}
 			<h1 id="main-branding"><a href="/" class="logotype home-link page-transition-button">Sleepless</a></h1>
 		{% block searchbox %}
 {# @TODO Rewrite search URLs to go from search/?for=query to just search/query/ #}
-			<form method="get" action="/search/" class="combo-field page-transition-form">
+			<form method="get" action="/search/" class="combo-field page-transition-form" id="search">
 				<input type="submit" value="{% trans "Search Decks" %}" class="btn combo-field-btn" />
 				<span class="combo-field-wrap"><input type="text" name="for" tabindex="1" class="combo-field-text" value="{{search_query}}" /></span>
 			</form>
 		{% endblock %}
 		</header>
 	</div>
-	<div id="wrap">
+	<div id="wrap" class="{{content_class}}">
 		{% block content %}{% endblock %}
 	</div>
 {% block footer %}
@@ -57,17 +57,16 @@
 			{% for lang_code, lang_name in LANGUAGES %}
 			<button title="{% language lang_code %}{% trans "Use Sleepless in English" %}{% endlanguage %}" name="language" value="{{ lang_code }}">{{ lang_name }}</button>{% if not forloop.last %}, {% endif %}
 			{% endfor %}
+			<!-- @TODO Hebrew support -->
 			<!--<button title="השתמש Sleepless עברית" name="language" value="he">עברית</button>-->
 		</form>
 	</footer>
 {% endblock %}
 
-{% if not request.is_ajax %}
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script>!window.jQuery && document.write(unescape('%3Cscript src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"%3E%3C/script%3E'))</script>
 	{% block extra_scripts %}{% endblock %}
 	<script src="{{ STATIC_URL }}js/main.min.js"></script>
-{% endif %}
 </body
 </html>
 {# @TODO {% endspaceless %} #}

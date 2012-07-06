@@ -42,7 +42,7 @@ var anime = (function($) {
 		offsetElement = function(element, position) {
 			// Create a clone for working with in memory
 			var elementClone = element.clone(),
-				offset = elementClone.position(),
+				offset = element.position(),
 				temp,
 				left,
 				top;
@@ -74,10 +74,9 @@ var anime = (function($) {
 			elementClone.css({
 				position: 'absolute', // position: absolute; must be set here, or else .position() will not work a few lines up from this one
 				top: top,
-				left: left
+				left: left,
+				visibility: 'visible'
 			});
-			
-			elementClone.css('visibility', 'visible');
 			
 			// Replace the element in the DOM with our new element (single reflow)
 			element.replaceWith(elementClone);
@@ -306,37 +305,62 @@ var anime = (function($) {
 		
 		/**
 		* Transitions the page content out to make way for dynamically loaded content.
-		* @TODO Handle back-to-deck buttons and the like
+		* @TODO Handle back buttons in the menubar
+		* @TODO Handle search form in the menubar
+		* @TODO Handle muting the menubar
+		* @TODO Change scripts on each page
+		* @TODO We could do a better job of handling all these arguments
 		*/
-		transitionPageTo = function(newMain, data) {
+		transitionPageTo = function(newMain, newMenubar, newFooter, newScripts, data) {
 			body = $(document.body),
-			main = body.find('#wrap'),
+			
+			main       = body.find('#wrap'),
 			mainOffset = main.offset(),
+			
+			menubar = body.find('#toolbar'),
+			
 			oldHeight = main.height(),
 			temp = newMain.clone().hide().appendTo(body), // Used to get the new height
 			newHeight = temp.height(),
+			
+			backButton         = menubar.find('.back-btn'),
+			newBackButton      = newMenubar.find('.back-btn'),
+			hasBackButtonNow   = backButton.length,
+			willHaveBackButton = newBackButton.length,
+			
+			searchForm    = menubar.find('#search'),
+			newSearchForm = newMenubar.find('#search'),
+			
+			footer    = body.find('#footer'),
+			
 			duration = {
 				css: 750,
 				jquery: 750
 			};
 			
-			body.find('#old-wrap').remove(); // Remove any possible remnants of an old transition
+			// @TODO Scroll to page top?
+			// @TODO On some pages (like the cards page), the footer winds up halfway down the page
+			
+			body.find('#old-wrap, script').remove(); // Remove any possible remnants of an old transition and old scripts
 			temp.remove();
 			
 			// Fade out and set the new page to the height of the original page
 			newMain.css({
 				height: oldHeight,
 				opacity: 0
-			});
+			}).data('original-positioning', newMain.css('position'));
 			
 			// Remove the old page from the flow and change its id
 			main.css({
 				position: 'absolute',
-				left: mainOffset.left
+				left: mainOffset.left // @TODO This offset messes things up when leaving the study page
 			}).attr('id', 'old-wrap');
 			
 			// Insert our new page before we animate
 			newMain.insertAfter(main);
+			
+			// Load the new scripts for this page
+			body.append(newScripts);
 			
 			if (canTransition) {
 				// A slight delay is necessary for the CSS transition to trigger
@@ -358,7 +382,7 @@ var anime = (function($) {
 				// Clean up after ourselves once the animation has finished
 				setTimeout(function() {
 					main.remove();
-					newMain.css('position', 'static');
+					newMain.css('position', newMain.data('original-positioning'));
 				}, duration.css+10);
 			} else {
 				// jQuery .animate fallback for browsers that don't support CSS transitions
@@ -391,6 +415,42 @@ var anime = (function($) {
 				});
 			}
 			
+			// Update the classes on the menubar
+			menubar.attr('class', newMenubar.attr('class'));
+			
+			// Animate any changes to the menubar's back button
+			if (hasBackButtonNow || willHaveBackButton) {
+				// @TODO If the buttons look the same, we should just swap them out with no animation
+				
+				// Remove the current button, if it exists
+				if (hasBackButtonNow) {
+					removeBackButton(backButton);
+				}
+				
+				if (willHaveBackButton) {
+					addBackButton(newBackButton);
+				}
+			}
+			
+			// Animate any changes to the menubar's search form
+			if (searchForm.length !== newSearchForm.length) {
+				if (searchForm.length) {
+					hideSearchForm();
+				} else {
+					showSearchForm(newSearchForm);
+				}
+			}
+			
+			// Animate any changes to the footer
+			if (footer.length !== newFooter.length) {
+				if (footer.length) {
+					hideFooter();
+				} else {
+					showFooter(newFooter);
+				}
+			}
+			
+			// Handle the home page
 			if (body.hasClass('home-page')) {
 				hideMural();
 			} else if (data.home) {
@@ -401,7 +461,7 @@ var anime = (function($) {
 		
 		
 		/**
-		* Animates the background image up until it's off the page
+		* Animates the background image up until it's off the page.
 		*/
 		hideMural = function() {
 			var body = $(document.body),
@@ -438,9 +498,10 @@ var anime = (function($) {
 		
 		
 		/**
-		* Animates the background image down until it's on the page
+		* Animates the background image down until it's on the page.
 		*/
 		showMural = function() {
+			// @TODO This animation is broken in FF when coming back from a non pushed-state page
 			var body = $(document.body),
 				duration = {
 					css: 1000,
@@ -464,6 +525,64 @@ var anime = (function($) {
 					duration: duration.jquery
 				});
 			}
+		},
+		
+		
+		
+		/**
+		* Animates the search form out on the menubar.
+		*/
+		hideSearchForm = function() {
+			var search = $('#search');
+			
+			search.remove();
+		},
+		
+		/**
+		* Animates the search form out on the menubar.
+		*/
+		showSearchForm = function(searchForm) {
+			var masthead = $('#masthead');
+			
+			masthead.append(searchForm);
+		},
+		
+		
+		
+		/**
+		* Animates a back button out on the menubar.
+		*/
+		removeBackButton = function(button) {
+			button.remove();
+		},
+		
+		/**
+		* Animates a back button in on the menubar.
+		*/
+		addBackButton = function(button) {
+			var masthead = $('#masthead');
+			
+			masthead.prepend(button);
+		},
+		
+		
+		
+		/**
+		* Animates the footer out.
+		*/
+		hideFooter = function() {
+			var footer = $('#footer');
+			
+			footer.remove();
+		},
+		
+		/**
+		* Animates the footer in.
+		*/
+		showFooter = function(newFooter) {
+			var body = $(document.body);
+			
+			body.append(newFooter);
 		},
 		
 		
@@ -551,15 +670,17 @@ var anime = (function($) {
 		* Slides the sidebar in from the left.
 		*/
 		animatedSidebarIn = function(sidebar, duration) {
-			// @TODO Fade things in as they animate in
+			// @TODO Things are all messed up for this in different browsers
 			sidebar = offsetElement(sidebar, {
-				top: 'auto',
-				left: '-100%'
+				top:  sidebar.position().top,
+				left: -sidebar.width()
 			});
 			
 			// Animate the elements
 			runAnimationOnElement(sidebar, duration);
 		},
+		
+		
 		
 		
 		

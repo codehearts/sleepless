@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-21 18:18-0500\n"
+"POT-Creation-Date: 2012-07-04 21:19-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,14 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: templates/base.html:35
+#: templates/base.html:29 templates/base.html.py:32
+msgid "Back to Deck"
+msgstr "Tillbaka till Däck"
+
+#: templates/base.html:38
 msgid "Search Decks"
 msgstr "Sök Däck"
 
-#: templates/base.html:48
+#: templates/base.html:51
 msgid "Change Language:"
 msgstr "Byt Språk:"
 
-#: templates/base.html:55
+#: templates/base.html:58
 msgid "Use Sleepless in English"
 msgstr "Använd Sleepless på svenska"

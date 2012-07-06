@@ -39,7 +39,7 @@
 <?php endif; ?>
 			<h1 id="main-branding"><a href="index.php" class="logotype">Sleepless</a></h1>
 <?php if ($body_class !== 'question-page'): ?>
-			<form method="get" action="search.php" class="combo-field page-transition-form">
+			<form method="get" action="search.php" class="combo-field page-transition-form" id="search">
 				<input type="submit" name="search-submit" value="Search Decks" class="btn combo-field-btn" />
 				<span class="combo-field-wrap"><input type="text" name="search" class="combo-field-text" /></span>
 			</form>

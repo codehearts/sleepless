@@ -74,7 +74,7 @@
 		adjustCardText = function(side) {
 			var children = side.children(),
 				parent = side.parent(),
-				ratio = (parent.width() - 460) / 300;
+				ratio = parent.width() / 500;
 			
 			// Adjust each field on the card
 			children.each(function(i, child) {

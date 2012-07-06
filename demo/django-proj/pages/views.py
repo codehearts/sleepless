@@ -1,5 +1,9 @@
-import random, util
+# coding=utf-8
+
+import random, json, util
 from itertools import chain
+from datetime import datetime
+#from time import gmtime, strftime
 from operator import attrgetter
 from django.utils.html import escape
 from django.shortcuts import render_to_response, get_object_or_404
@@ -58,14 +62,10 @@ def search(request):
 def launch(request, author, deck_slug):
 	deck = Deck.objects.get(slug=deck_slug, author__name=author)
 	
-	tag_ids = Deck_Tags.objects.filter(deck=deck).select_related('tag').order_by('tag__name')
-	tags = [tag_id.tag for tag_id in tag_ids]
-	
 	return render_to_response('launch.html', {
 		'title': escape(deck.name) + sep + site_title,
 		'deck': deck,
-		'card_count': util.card_count_of(deck),
-		'tags': tags
+		'card_count': util.card_count_of(deck)
 	}, context_instance=RequestContext(request))
 
 
@@ -82,12 +82,17 @@ def study(request, author, deck_slug):
 	
 	card_count = util.card_count_of(deck)
 	
-	use_time   = request.POST.get('use_time', False)
-	time_limit = float(request.POST.get('time_limit', False))
+	start_time = request.POST.get('start-time', False)
+	use_time   = request.POST.get('use-time', False)
+	time_limit = float(request.POST.get('time-limit', 0)) * 60
 	randomized   = request.POST.get('randomize', False)
-	random_queue = request.POST.get('random_queue')
-	use_reverse  = request.POST.get('use_reverse', False)
-	repeat_queue = request.POST.get('repeat_queue')
+	random_queue = request.POST.get('random-queue')
+	use_reverse  = request.POST.get('use-reverse', False)
+	repeat_queue = json.loads(request.POST.get('repeat-queue', '[]'))
+	
+	# If the tiemstamp hasn't been set yet, set it now
+	if not start_time:
+		start_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%d %H:%M:%S')
 	
 	# Sort out issues with converting strings to booleans
 	if use_reverse == 'False':
@@ -97,53 +102,91 @@ def study(request, author, deck_slug):
 	if use_time == 'False':
 		use_time = False
 	
-	# @TODO There's a stylistic issue with cards where text is getting clipped
-	
-	current_item = request.POST.get('current_item', 0)
-	last_item    = request.POST.get('last_item', request.POST.get('card-count', 20))
+	current_item = int(request.POST.get('current-item', 0))
+	last_item    = int(request.POST.get('last-item', request.POST.get('card-count', 20)))
 	order = int(request.POST.get('order', 1)) # The card we're currently displaying
 	
+	# @TODO If this is the first item, bump the deck's study count
+	
 	# Limit the number of cards to study by the total number in the deck
-	if not randomized and last_item > card_count:
+	if last_item > card_count:
 		last_item = card_count
-	# If we're randomizing and we don't have a randomized queue initialzed, create one
-	elif randomized and not random_queue:
-		random_queue = random.shuffle(range(1, last_item+1))
+	
+	# If we're randomizing and we don't have a randomized queue initialzed, create one and randomize the first card
+	if randomized and not random_queue:
+		random_queue = range(1, card_count+1)
+		random.shuffle(random_queue)
+		
+		order = random_queue.pop()
 	
 	template = 'study.html'
-	title = 'Now Studying'
+	title = _('Now Studying')%{}
+	content_class = 'study-page'
 	
-	# End the session if the current card was also the last card
-	if current_item == last_item:
-		headings = [_('That&rdquo;s it!'), _('You&rdquo;re Done!'), _('Congratulations!'), _('Nice Work!')]
+	# The session ended if the current card was also the last card
+	session_ended = (current_item == last_item)
+	
+	# Whether or not time is up
+	# @TODO This is an absolute mess, converting time strings into datetime objects and back and forth
+	time_up = use_time and time_limit < (datetime.utcnow() - datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')).seconds
+	
+	if session_ended or time_up:
+		headings = [
+			_(u'That’s It!'),
+			_(u'You’re Done!'),
+			_('Congratulations!'),
+			_('Nice Work!')
+		]
+		random.shuffle(headings)
 		
-		heading = random.shuffle(heading).pop()
+		heading = headings.pop()
 		template = 'completion.html'
-		title = 'Studying Complete'
-	
-	# If a question was answered, count the card as completed
-	if answered:
-		current_item = int(current_item) + 1
-	
-	if show_next_card:
-		print randomized
-		if randomized:
-			order = list(random_queue).pop()
+		title = _('Studying Complete')%{}
+		content_class = 'completion-page'
+		
+		# @TODO This should be the time limit if one was set
+		if use_time:
+			print time_limit
+			total_time = time_limit
 		else:
-			order += 1
+			start_time = datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+			total_time = (datetime.utcnow() - start_time).seconds
+		
+		hours, remainder = divmod(total_time, 3600)
+		minutes, seconds = divmod(remainder, 60)
+		
+		if hours:
+			time_taken = '%d:%02d:%02d' % (hours, minutes, seconds)
+		else:
+			time_taken = '%d:%02d' % (minutes, seconds)
+	# Otherwise, check if we need to show the next card or mark the current one as completed
+	else:
+		time_taken = 0
+		
+		# If a question was answered, count the card as completed
+		if answered:
+			current_item += 1
+		elif show_next_card:
+			if randomized:
+				random_queue = json.loads(random_queue)
+				order = random_queue.pop()
+			else:
+				order += 1
+	
+	
 	
 	card = Card.objects.get(deck=deck, order=order)
 	
 	
 	
 	return render_to_response(template, {
-		'title':   _(title)%{} + sep + escape(deck.name) + sep + site_title,
+		'title':   title + sep + escape(deck.name) + sep + site_title,
 		'heading': heading,
 		
 		'cancel_back_to_deck': True, # @TODO This is different on the completion page
 		
 		'toolbar_class': 'is-muted',
-		'body_class':    'study-page',
+		'content_class': content_class,
 		
 		# @TODO Send over an author_slug
 		
@@ -151,15 +194,20 @@ def study(request, author, deck_slug):
 		'card': card,
 		
 		'answered': answered,
+		'time_up':  time_up,
 		
+		'time_taken': time_taken,
+		
+		'start_time':   start_time,
 		'use_time':     use_time,
 		'time_limit':   time_limit,
 		'randomize':    randomized,
 		'use_reverse':  use_reverse,
-		'current_item': current_item,
-		'last_item':    last_item,
 		'random_queue': random_queue,
-		'repeat_queue': repeat_queue
+		'repeat_queue': repeat_queue,
+		
+		'current_item': current_item,
+		'last_item':    last_item
 	}, context_instance=RequestContext(request))
 
 

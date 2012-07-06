@@ -35,7 +35,7 @@ body {
 	.transition(all 0.75s ease);
 	.transition_property(opacity~',' height);
 	
-	.study-page & {
+	&.study-page {
 		position: absolute;
 		top: 55px;
 	}
@@ -101,7 +101,7 @@ input {
 
 
 .no-transition {
-	.transition_duration(0 ~'!important');
+	.transition(none ~'!important');
 }
 
 .hide {
