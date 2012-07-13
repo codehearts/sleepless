@@ -37,7 +37,9 @@ body {
 	
 	&.study-page {
 		position: absolute;
-		top: 55px;
+		top: 40px;
+		bottom: 68px;
+		width: 100%;
 	}
 	
 	&:after {
@@ -73,7 +75,7 @@ code {
 	white-space: pre-wrap;
 }
 
-input, textarea {
+input, button, textarea {
 	background: rgba(255,255,255,.25);
 	border: 1px solid @grey;
 	border-radius: 0;
@@ -96,6 +98,11 @@ input {
 		.transition(all 0.2s ease);
 		cursor: pointer;
 	}
+}
+
+button {
+	-webkit-appearance: none;
+	cursor: pointer;
 }
 
 

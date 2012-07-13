@@ -3,12 +3,11 @@
 
 {% block content %}
 	<header class="six-col pad right-align desc-hd" id="launch-header">
-		<h1>{{deck.name}}</h1>
+		<h1 id="deck-{{deck.id}}" class="deck-id">{{deck.name}}</h1>
 		{# @TODO Santifize the input for the deck descriptions when they're saved to the database #}
 		<p class="desc-shd">{{deck.description|safe}}</p>
 	</header>
 	
-	<!-- @TODO Animate this -->
 	<ul class="sidebar" id="launch-sidebar">
 		<li>
 			<div class="origami">
@@ -25,34 +24,26 @@
 			</div>
 		</li>
 		<li>
-			<a href="/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/cards/" class="page-transition-button" title="{% trans "See all cards in this deck" %}">
+			<a href="/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/cards/" class="card-count" title="{% trans "See all cards in this deck" %}">
 			{%blocktrans count card_count as card_count%}{{card_count}} card{%plural%}{{card_count}} cards{%endblocktrans%}
 			</a>
 		</li>
+		{# @TODO Tell the user if this deck is using storage, allow them to clear their progress for this deck #}
 	</ul>
 	
-	<form method="post" action="/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/study/" class="options six-col right-align page-transition-form" id="launch-form">
+	<form method="post" action="/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/study/" class="options six-col right-align" id="launch-form">
 		{% csrf_token %}
-		<span class="input-btn large-btn go-btn"><input type="submit" name="start-studying" value="{% trans "Start Studying" %}" /></span>
-		
+		<button type="submit" class="btn large-btn go-btn" name="start-studying">{% trans "Start Studying" %}</button>
+		{# @TODO These fields should be validated #}
 		<h2 class="subhead pad">{% trans "Study Options" %}</h2>
 		
-		<!--<div class="three-col-cell right-align">
-			<div class="box check-box attention-box">
-				<label class="box-shd">
-				{%blocktrans with '<input type="checkbox" name="record" />' as checkbox%}{{checkbox}} Record your progress?{%endblocktrans%}
-				</label>
-				<p class="box-bd">{% trans "Sleepless can record your progress in this deck for next time. As a guest, your progress will not be available on other devices." %}</p>
-			</div>
-			<p class="pad option-text">
-			{%blocktrans count 27 as cards_to_study%}You have {{cards_to_study}} card to study today.{%plural%}You have {{cards_to_study}} cards to study today.{%endblocktrans%}
-			</p>
-		</div>-->
+		<div class="three-col-cell right-align" id="js-study-options"></div>
 		
-		<div class="three-col-cell pad option-group">
+		<div class="three-col-cell pad option-group" id="static-study-options">
 			<label class="small-text-option">
-			{%blocktrans with '<input type="number" min="0" max="'|add:'1274'|add:'" name="card-count" value="20" />' as numeric_box%}{{numeric_box}} new cards to study{%endblocktrans%}
+			{%blocktrans with '<input type="number" min="0" max="'|add:'1274'|add:'" name="cards-per-session" value="20" />' as numeric_box%}{{numeric_box}} new cards to study{%endblocktrans%}
 			</label>
+			<!-- @TODO Requires JS -->
 			<!--<label class="sub-option checkbox-option">
 			{%blocktrans with '<input type="checkbox" name="continue" />' as checkbox%}{{checkbox}} Continue from where I left off{%endblocktrans%}
 			</label>-->

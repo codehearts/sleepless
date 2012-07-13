@@ -3,6 +3,7 @@
 
 {% block content %}
 	<header class="six-col pad right-align desc-hd" id="completion-header">
+	{# @TODO If time was up, offer to let the user continue studying anyway #}
 	{% if time_up %}
 		<h1>{% trans 'Time’s Up.' %}</h1>
 	{% else %}
@@ -12,7 +13,7 @@
 			{% trans 'Return to Deck' as deck_link_title %}
 			{% with deck.author.name|slugify as author_slug and deck.name as deck_name %}
 			{% with '/author/'|add:author_slug|add:'/deck/'|add:deck.slug|add:'/' as deck_url %}
-			{% with '<a href="'|add:deck_url|add:'" class="page-transition-button" title="'|add:deck_link_title|add:'">'|add:deck_name|add:'</a>'|safe as deck_name %}
+			{% with '<a href="'|add:deck_url|add:'" title="'|add:deck_link_title|add:'">'|add:deck_name|add:'</a>'|safe as deck_name %}
 				{% if time_up %}
 					{% blocktrans %}Your time limit has expired for {{deck_name}}. You deserve a break!{% endblocktrans %}
 				{% else %}
@@ -22,7 +23,7 @@
 		</p>
 	</header>
 	
-	<ul class="sidebar slow-fade-in" id="completion-sidebar">
+	<ul class="sidebar" id="completion-sidebar">
 		<li class="origami">
 			<header class="origami-header">
 				<div class="origami-content">
@@ -47,7 +48,7 @@
 		<!--<li class="origami upcoming" id="completion-cards-tomorrow">
 			<header class="origami-header">
 				<div class="origami-content">
-					<p class="origami-num">{# @TODO #}2047</p>
+					<p class="origami-num">2047</p>
 				</div>
 			</header>
 			<footer class="origami-footer">
@@ -57,7 +58,7 @@
 	</ul>
 	
 	<ul class="six-col pad right-align" id="completion-links">
-		<li><a href="/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/" class="btn full-btn page-transition-button">{% trans 'Return to Deck' %}</a></li>
-		<li><a href="/" class="btn full-btn home-link page-transition-button">{% trans 'Return Home' %}</a></li>
+		<li><a href="/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/" class="btn full-btn">{% trans 'Return to Deck' %}</a></li>
+		<li><a href="/" class="btn full-btn home-link">{% trans 'Return Home' %}</a></li>
 	</ul>
 {% endblock %}

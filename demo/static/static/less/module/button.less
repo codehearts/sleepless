@@ -1,6 +1,4 @@
-.btn,
-.input-btn,
-.input-btn> input {
+.btn {
 	background-color: @light_grey;
 	border: 0 solid @light_grey;
 	.transition(all 0.2s ease);
@@ -23,72 +21,36 @@
 	}
 }
 
-.input-btn {
-	background-color: none;
-}
 
 
-
-.large-btn,
-.input-btn.large-btn,
-.input-btn.large-btn> input {
+.large-btn {
 	.transition_duration(0.225s);
-	padding: 4px 20px;
+	padding: 0 14px;
 	.font_size(28);
-	line-height: 42px;
-	height: 42px;
-}
-
-.input-btn.large-btn,
-.input-btn.large-btn> input {
+	line-height: 50px;
 	height: 50px;
 }
 
-.input-btn.large-btn {
-	padding: 0;
-}
 
 
-
-.mega-btn,
-.input-btn.mega-btn,
-.input-btn.mega-btn> input {
+.mega-btn {
 	.transition_duration(0.3s);
-	padding: 22px 30px;
+	padding: 0 30px;
 	.l4-font-size;
+	line-height: 80px;
 	font-weight: normal;
-	height: 36px;
-}
-
-.input-btn.mega-btn,
-.input-btn.mega-btn> input {
 	height: 80px;
 }
 
-.input-btn.mega-btn {
-	padding: 0;
-}
 
 
-
-.full-btn,
-.input-btn.full-btn,
-.input-btn.full-btn> input {
+.full-btn {
 	.transition_duration(0.3s);
 	padding: 12px 0;
 	.l4-font-size;
 	font-weight: normal;
 	height: 36px;
 	width: 100%;
-}
-
-.input-btn.full-btn,
-.input-btn.full-btn> input {
-	height: 60px;
-}
-
-.input-btn.full-btn {
-	padding: 0;
 }
 
 
@@ -166,9 +128,7 @@
 /* IE Fixes */
 
 .lt-ie8 {
-	.btn,
-	.input-btn,
-	.input-btn> input {
+	.btn {
 		.ie7_inline_block;
 		overflow: visible; /* Fixes a problem where buttons become narrower than their text contents */
 	}

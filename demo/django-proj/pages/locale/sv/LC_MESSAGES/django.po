@@ -1,13 +1,13 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Amateur Swedish Sleepless Demo translation
+# Copyright (C) 2012
+# This file is distributed under the same license as the page package.
+# Nate Hart <nate@iamnatehart.com>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-05 21:52-0500\n"
+"POT-Creation-Date: 2012-07-10 18:03-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,82 +17,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: views.py:22
-#, python-format
-msgid "Welcome to the %(site_title)s"
-msgstr "Välkommen till %(site_title)s"
-
-#: views.py:46
-#, python-format
-msgid "Results for &ldquo;%(search_query)s&rdquo;"
-msgstr "Sökresultat på &ldquo;%(search_query)s&rdquo;"
-
-#: views.py:49 templates/search.html:19
-msgid "You Didn't Search For Anything!"
-msgstr "Du har inte söka efter vad!"
-
-#: views.py:123
-msgid "Now Studying"
-msgstr "Nu Studerar"
-
-#: views.py:135
-msgid "That’s It!"
-msgstr "Det är Det!"
-
-#: views.py:136
-msgid "You’re Done!"
-msgstr "Du är Fardigt!"
-
-#: views.py:137
-msgid "Congratulations!"
-msgstr "Grattis!"
-
-#: views.py:138
-msgid "Nice Work!"
-msgstr "Nice Work!"
-
-#: views.py:144
-msgid "Studying Complete"
-msgstr "Studera Fullständig"
-
-#: views.py:222 templates/card_listing.html:6
+#: templates/card_listing.html:6 views/card_listing.py:13
 #, python-format
 msgid "Cards in %(deck_name)s"
 msgstr "Kort i %(deck_name)s"
 
-#: templates/completion.html:7
+#: templates/completion.html:8
 msgid "Time’s Up."
 msgstr "Tiden är Ute"
 
-#: templates/completion.html:12 templates/completion.html.py:60
+#: templates/completion.html:13 templates/completion.html.py:61
 msgid "Return to Deck"
 msgstr "Återgå till Däck"
 
-#: templates/completion.html:17
-#, fuzzy, python-format
+#: templates/completion.html:18
+#, python-format
 msgid "Your time limit has expired for %(deck_name)s. You deserve a break!"
-msgstr ""
-"Din tid har löpt ut för %(deck_name)s. Du förtjänar en paus!"
+msgstr "Din tid har löpt ut för %(deck_name)s. Du förtjänar en paus!"
 
-#: templates/completion.html:19
-#, fuzzy, python-format
+#: templates/completion.html:20
+#, python-format
 msgid "You've finished studying %(deck_name)s for today."
-msgstr ""
-"Du har avslutat sina studier %(deck_name)s för idag."
+msgstr "Du har avslutat sina studier %(deck_name)s för idag."
 
-#: templates/completion.html:33
+#: templates/completion.html:34
 msgid "Time"
 msgstr "Tid"
 
-#: templates/completion.html:43
+#: templates/completion.html:44
 msgid "Today"
 msgstr "Idag"
 
-#: templates/completion.html:54
+#: templates/completion.html:55
 msgid "Tomorrow"
 msgstr "I Morgon"
 
-#: templates/completion.html:61
+#: templates/completion.html:62
 msgid "Return Home"
 msgstr "Återvända Hem"
 
@@ -113,7 +73,7 @@ msgstr ""
 msgid "To get you started, here are some of the most popular decks:"
 msgstr "Att komma igång, här är några av de mest populär däck:"
 
-#: templates/launch.html:21 templates/modules/deck.html:13
+#: templates/launch.html:20 templates/modules/deck.html:13
 #, python-format
 msgid ""
 "By <a href=\"%(author_url)s\" title=\"See more decks by %(author_name)s\">"
@@ -122,22 +82,22 @@ msgstr ""
 "Av <a href=\"%(author_url)s\" title=\"Se fler däck av %(author_name)s\">"
 "%(author_name)s</a>"
 
-#: templates/launch.html:28
+#: templates/launch.html:27
 msgid "See all cards in this deck"
 msgstr "Se alla kort i detta däck"
 
-#: templates/launch.html:29
+#: templates/launch.html:28
 #, python-format
 msgid "%(card_count)s card"
 msgid_plural "%(card_count)s cards"
 msgstr[0] "%(card_count)s kort"
 msgstr[1] "%(card_count)s kort"
 
-#: templates/launch.html:36
+#: templates/launch.html:35
 msgid "Start Studying"
 msgstr "Börja Studera"
 
-#: templates/launch.html:38
+#: templates/launch.html:37
 msgid "Study Options"
 msgstr "Studera Inställningar"
 
@@ -166,42 +126,46 @@ msgstr[1] "Du har %(cards_to_study)s kort att studera idag."
 msgid "%(numeric_box)s new cards to study"
 msgstr "%(numeric_box)s nya kort att studera"
 
-#: templates/launch.html:57
+#: templates/launch.html:58
 #, python-format
 msgid "%(checkbox)s Continue from where I left off"
 msgstr "%(checkbox)s Fortsätt där jag slutade"
 
-#: templates/launch.html:61
+#: templates/launch.html:62
 #, python-format
 msgid "%(checkbox)s Set a time limit for this session"
 msgstr "%(checkbox)s Fastställa en tidsfrist för denna session"
 
-#: templates/launch.html:64
+#: templates/launch.html:65
 #, python-format
 msgid "%(numeric_box)s minutes"
 msgstr "%(numeric_box)s minuter"
 
-#: templates/launch.html:68
+#: templates/launch.html:69
 #, python-format
 msgid "%(checkbox)s Randomize order"
 msgstr "%(checkbox)s Randomisera ordning"
 
-#: templates/launch.html:72
+#: templates/launch.html:73
 #, python-format
 msgid "%(checkbox)s Include reversed cards"
 msgstr "%(checkbox)s Inkludera omvända kort"
 
-#: templates/search.html:7
+#: templates/search.html:6
 #, python-format
 msgid "Decks Related to &ldquo;%(search_query)s&rdquo;"
 msgstr "Däck som länkar till &ldquo;%(search_query)s&rdquo;"
 
-#: templates/search.html:16
+#: templates/search.html:15
 #, python-format
 msgid "Sorry, I Found No Decks For &ldquo;%(search_query)s&rdquo;"
 msgstr "Tyvärr hittade jag inga däck för &ldquo;%(search_query)s&rdquo;"
 
-#: templates/search.html:20
+#: templates/search.html:18 views/search.py:39
+msgid "You Didn't Search For Anything!"
+msgstr "Du har inte söka efter vad!"
+
+#: templates/search.html:19
 msgid ""
 "If you're unsure what to search for, you could try looking through the most "
 "popular decks:"
@@ -209,7 +173,15 @@ msgstr ""
 "Om du är osäker på vad du vill söka efter, kan du kolla igenom de mest "
 "populära däck:"
 
-#: templates/study.html:51
+#: templates/study.html:47
+msgid "Repeat"
+msgstr "Upprepa"
+
+#: templates/study.html:48
+msgid "Next"
+msgstr "Nästa"
+
+#: templates/study.html:58
 msgid "Show Answer"
 msgstr "Visa Svar"
 
@@ -217,9 +189,43 @@ msgstr "Visa Svar"
 msgid "See more"
 msgstr "Läs mer"
 
-#: templates/modules/deck.html:17
+#: templates/modules/deck.html:16
 msgid "Study Deck"
 msgstr "Studera Däck"
+
+#: views/index.py:7
+#, python-format
+msgid "Welcome to the %(site_title)s"
+msgstr "Välkommen till %(site_title)s"
+
+#: views/search.py:35
+#, python-format
+msgid "Results for &ldquo;%(search_query)s&rdquo;"
+msgstr "Sökresultat på &ldquo;%(search_query)s&rdquo;"
+
+#: views/study.py:16
+msgid "Now Studying"
+msgstr "Nu Studerar"
+
+#: views/study.py:125
+msgid "That’s It!"
+msgstr "Det är Det!"
+
+#: views/study.py:126
+msgid "You’re Done!"
+msgstr "Du är Fardigt!"
+
+#: views/study.py:127
+msgid "Congratulations!"
+msgstr "Grattis!"
+
+#: views/study.py:128
+msgid "Nice Work!"
+msgstr "Nice Work!"
+
+#: views/study.py:135
+msgid "Studying Complete"
+msgstr "Studera Fullständig"
 
 #~ msgid "Tags:"
 #~ msgstr "Taggar:"

@@ -24,10 +24,6 @@
 		vertical-align: middle;
 		width: 100%;
 	}
-	
-	&.is-muted {
-		color: @grey;
-	}
 }
 
 #back {
@@ -37,10 +33,10 @@
 	width: 100-(5/320*200%);
 	
 	&> .card {
-		padding: 5px 5/310*100% 0;
+		padding: 10px 5/310*100% 0;
 		position: absolute;
 		top: 0;
-		bottom: 125px;
+		bottom: 0;
 		overflow: auto;
 		color: @dark_grey;
 		width: 300/310*100%;
@@ -49,64 +45,72 @@
 			min-height: 100%;
 		}
 	}
-}
-
-#study-show-answer {
-	background: none;
-	margin: 40px auto 0;
-	display: block;
-}
-
-.study-levels {
-	margin-left: -5/320*100%;
-	position: absolute;
-	bottom: 27px;
-	overflow: hidden;
-	width: 320/310*100%;
 	
-	&> input[type=submit] {
-		margin: 0;
-		float: left;
-		position: relative;
-		.l2-font-size;
-		font-weight: normal;
-		height: 49px;
-		width: 50%;
+	&> form {
+		margin-left: -5/320*100%;
+		position: absolute;
+		bottom: -68px;
+		overflow: hidden;
+		width: 320/310*100%;
+		
+		& button {
+			width: 25%;
+		}
+		
+		&> .good-review-delay-options {
+			float: left;
+			width: 75%;
+			
+			&> .review-delay-caption {
+				margin: 0 5px;
+				.s-font-size;
+			}
+			
+			&> button {
+				margin: 0;
+				padding: 0;
+				float: left;
+				.s-font-size;
+				font-weight: normal;
+				height: 50px;
+				width: 33.33333333%;
+				
+				&> .button-numeral {
+					display: block;
+					.l2-font-size;
+					font-weight: normal;
+				}
+			}
+		}
 	}
-}
-
-#study-l1,
-#study-l2 {
-	&:hover, &:focus {
-		background: @dark_grey;
-		color: #fff;
+	
+	#show-answer {
+		margin: 0 auto 40px;
+		display: block;
+		width: 75%;
 	}
-}
-
-#study-l0 {
-	top: 49px;
-	left: 50%;
-}
-
-#study-l1 {
-	background-color: fadeout(@green, 50%);
-	top: 49px;
-	right: 50%;
-}
-
-#study-l2 {
-	background-color: fadeout(@green, 25%);
-	bottom: 49px;
-}
-
-#study-l3 {
-	bottom: 49px;
+	
+	#repeat {
+		margin-top: 18px;
+		float: right;
+	}
+	
+	#next {
+		margin-top: 18px;
+	}
 }
 
 .study-status {
-	position: absolute;
-	bottom: 5px;
-	left: 0;
+	margin: 10px 10px 0 0;
+	float: right;
+}
+
+.study-status-item {
+	margin-left: 10px;
+	
+	&:first-child {
+		margin-left: 0;
+	}
 }
 
 .study-repeats {

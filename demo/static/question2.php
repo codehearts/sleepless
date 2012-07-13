@@ -1,5 +1,5 @@
 <?php require_once 'framework.php'; ?>
-<?php get_header('Hebrew | Now Studying | Sleepless Demo', 'question-page'); ?>
+<?php get_header('Hebrew | Now Studying | Sleepless Demo', '', 'study-page'); ?>
 	<section id="front" class="card one-sided-card">
 		<div class="card-front fade-in">
 			<span class="card-field center-field rtl">בקבוק</span>
@@ -8,12 +8,7 @@
 	</section>
 	<section id="back">
 		<form method="post" action="answer2.php" class="is-muted">
-			<span class="input-btn mega-btn" id="study-show-answer"><input type="submit" name="show-answer" value="Show Answer" /></span>
+			<button type="submit" class="btn mega-btn" id="show-answer" name="show-answer">Show Answer</button>
 		</form>
-		
-		<div class="study-status">
-			<span class="study-time">0:03</span> 
-			<span class="study-progress">14/32</span> 
-		</div>
 	</section>
 <?php get_footer('study'); ?>

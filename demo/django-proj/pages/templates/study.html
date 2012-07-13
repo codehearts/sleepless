@@ -14,8 +14,7 @@
 		</div>
 	</section>
 	<section id="back">
-		{% if answered %}
-		<div class="card one-sided-card" {% if answered %}class="is-muted"{% endif %}>
+		<div class="card one-sided-card" {% if not card_was_flipped %}style="display:none;"{% endif %}>
 			<div class="card-back">
 				{% for template in deck.b_template|parse_card_template_fields %}
 				{% with card|parse_card_template:template as card %}
@@ -24,10 +23,13 @@
 				{% endfor %}
 			</div>
 		</div>
-		{% endif %}
 		
-		<form method="post" action="{{ request.get_full_path }}" class="{{ answered|yesno:"study-levels,is-muted" }}">
+		{# @TODO JS needs to change the "session-progression-options" class to "review-delay-options" #}
+		<form method="post" action="{{ request.get_full_path }}" class="{{ card_was_flipped|yesno:"session-progression-options,is-muted" }}" id="study-form">
 			{% csrf_token %}
+			<input type="hidden" name="deck-id" class="deck-id" value="{{ deck.id }}" />
+			<input type="hidden" name="card-count" class="card-count" value="{{ card_count }}" />
+			
 			<input type="hidden" name="start-time" value="{{ start_time }}" />
 			<input type="hidden" name="use-time" value="{{ use_time }}" />
 			<input type="hidden" name="time-limit" value="
@@ -38,35 +40,37 @@
 			<input type="hidden" name="order" value="{{ card.order }}" />
 			<input type="hidden" name="current-item" value="{{ current_item }}" />
 			<input type="hidden" name="last-item" value="{{ last_item }}" />
-			<input type="hidden" name="randomize" value="{{ randomize }}" />
 			<input type="hidden" name="random-queue" value="{{ random_queue }}" />
 			<input type="hidden" name="repeat-queue" value="{{ repeat_queue }}" />
 			
-			{% if answered %}
-			<input type="submit" name="study-l0" value="Repeat" class="btn bad-btn large-btn" id="study-l0" />
-			<input type="submit" name="study-l1" value="Bad" class="btn good-btn large-btn" id="study-l1" />
-			<input type="submit" name="study-l2" value="Good" class="btn good-btn large-btn" id="study-l2" />
-			<input type="submit" name="study-l3" value="Excellent" class="btn good-btn large-btn" id="study-l3" />
+			{% if card_was_flipped %}
+			<button type="submit" class="btn bad-btn large-btn" name="repeat" value="1" id="repeat">{% trans 'Repeat' %}</button>
+			<button type="submit" class="btn good-btn large-btn" name="next" value="1" id="next">{% trans 'Next' %}</button>
 			{% else %}
-			<span class="input-btn mega-btn" id="study-show-answer"><input type="submit" name="show-answer" value="{% trans "Show Answer" %}" /></span>
+			<button type="submit" class="btn mega-btn" id="show-answer" name="show-answer">{% trans "Show Answer" %}</button>
 			{% endif %}
 		</form>
-		
-		<div class="study-status">
-			<!-- @TODO Requires JS -->
-			<!-- <span class="study-time">0:07</span>  -->
-			<span class="study-progress">{{ current_item }}/{{ last_item }}</span> 
-			<!-- @TODO Requires JS -->
-			<!-- <span class="study-repeats">1</span> -->
-		</div>
 	</section>
 {% endblock %}
 
-{# Remove the footer and search box on this page #}
-{% block searchbox %}{% endblock %}
+{% block menubar %}
+	<div class="study-status">
+		<!-- @TODO Add hidden text for screen readers (like "3/10 cards studied," "2 cards to repeat") -->
+		
+		<!-- @TODO Requires JS -->
+		<!-- @TODO How important is this, anyway? -->
+		<!-- @TODO We could show this value after a question has been answered, however -->
+		<!-- <span class="study-status-item study-time">0:07</span> -->
+		<span class="study-status-item study-progress"><span class="current-item">{{current_item}}</span>/{{last_item}}</span>
+		{% if repeat_queue %}
+		<span class="study-status-item study-repeats">{{repeat_queue|length}}</span>
+		{% endif %}
+	</div>
+{% endblock %}
+
+{# Remove the footer from this page #}
 {% block footer %}{% endblock %}
 
 {% block extra_scripts %}
 	<script src="{{ STATIC_URL }}js/cards.min.js"></script>
-	<script src="{{ STATIC_URL }}js/study.min.js"></script>
 {% endblock %}

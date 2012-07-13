@@ -1,0 +1,37 @@
+# Amateur Swedish Sleepless Demo translation
+# Copyright (C) 2012
+# This file is distributed under the same license as the page package.
+# Nate Hart <nate@iamnatehart.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-10 18:55-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: static/js/main.min.js:9
+msgid "%(checkbox)s Record your progress?"
+msgstr "%(checkbox)s Anteckna dina framsteg?"
+
+#: static/js/main.min.js:9
+msgid ""
+"Sleepless can record your progress in this deck for next time. As a guest, "
+"your progress will not be available on other devices."
+msgstr ""
+"Sleepless kan anteckna dina framsteg i detta däck till nästa gång. Som gäst "
+"kommer dina framsteg inte tillgänglig på andra anordningar."
+
+#: static/js/main.min.js:9
+#, c-format
+msgid "You have %s card to study today."
+msgid_plural "You have %s cards to study today."
+msgstr[0] "Du har %s kort för att studera idag."
+msgstr[1] "Du har %s kort att studera idag."

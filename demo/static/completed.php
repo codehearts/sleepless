@@ -6,7 +6,7 @@
 		<p class="desc-shd">You've finished studying <a href="launch.php" title="Return to Deck">Lesson 3 Japanese Vocabulary</a> for today.</p>
 	</header>
 	
-	<ul class="sidebar slow-fade-in" id="completion-sidebar">
+	<ul class="sidebar" id="completion-sidebar">
 		<li class="origami">
 			<header class="origami-header">
 				<div class="origami-content">

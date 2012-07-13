@@ -3,7 +3,6 @@
 
 {% block content %}
 	{% if found_decks and search_query %}
-	{# @TODO This title casing is probably weak #}
 	<h1 class="pad">{%blocktrans with search_query|title as search_query%}Decks Related to &ldquo;{{search_query}}&rdquo;{%endblocktrans%}</h1>
 	
 	<ul class="grid two-col animate">

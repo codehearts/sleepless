@@ -26,7 +26,7 @@
 <?php endif; ?>
 </head>
 <body class="<?php echo $body_class; ?>">
-<?php if ($body_class === 'question-page'): ?>
+<?php if ($content_class === 'study-page'): ?>
 	<div id="toolbar" class="is-muted">
 <?php else: ?>
 	<div id="toolbar">
@@ -34,16 +34,24 @@
 		<header id="masthead">
 <?php if ($body_class === 'cards-page' || $body_class === 'completion-page'): ?>
 			<a href="launch.php" class="btn back-btn">Back to Deck</a>
-<?php elseif ($body_class === 'question-page'): ?>
+<?php elseif ($content_class === 'study-page'): ?>
 			<a href="launch.php" class="btn back-btn cancel-btn">Back to Deck</a>
 <?php endif; ?>
+<?php if ($content_class !== 'study-page'): ?>
 			<h1 id="main-branding"><a href="index.php" class="logotype">Sleepless</a></h1>
-<?php if ($body_class !== 'question-page'): ?>
-			<form method="get" action="search.php" class="combo-field page-transition-form" id="search">
+<?php endif; ?>
+<?php if ($content_class !== 'study-page'): ?>
+			<form method="get" action="search.php" class="combo-field" id="search">
 				<input type="submit" name="search-submit" value="Search Decks" class="btn combo-field-btn" />
 				<span class="combo-field-wrap"><input type="text" name="search" class="combo-field-text" /></span>
 			</form>
+<?php else: ?>
+			<div class="study-status">
+				<span class="study-status-item study-time">0:07</span><!-- Commenting out the whitespace because we're stripping it in Django
+				--><span class="study-status-item study-progress">3/10</span><!--
+				--><span class="study-status-item study-repeats">1</span>
+			</div>
 <?php endif; ?>
 		</header>
 	</div>
-	<div id="wrap">
+	<div id="wrap" class="<?php echo $content_class; ?>">

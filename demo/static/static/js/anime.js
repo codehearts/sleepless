@@ -305,11 +305,10 @@ var anime = (function($) {
 		
 		/**
 		* Transitions the page content out to make way for dynamically loaded content.
-		* @TODO Handle back buttons in the menubar
-		* @TODO Handle search form in the menubar
 		* @TODO Handle muting the menubar
-		* @TODO Change scripts on each page
 		* @TODO We could do a better job of handling all these arguments
+		*
+		* @TODO This is a horrible, horrible mess and provides a shoddy user experience
 		*/
 		transitionPageTo = function(newMain, newMenubar, newFooter, newScripts, data) {
 			body = $(document.body),
@@ -331,7 +330,7 @@ var anime = (function($) {
 			searchForm    = menubar.find('#search'),
 			newSearchForm = newMenubar.find('#search'),
 			
-			footer    = body.find('#footer'),
+			footer = body.find('#footer'),
 			
 			duration = {
 				css: 750,
@@ -382,7 +381,10 @@ var anime = (function($) {
 				// Clean up after ourselves once the animation has finished
 				setTimeout(function() {
 					main.remove();
-					newMain.css('position', newMain.data('original-positioning'));
+					newMain.css({
+						position: newMain.data('original-positioning'),
+						height: 'auto'
+					});
 				}, duration.css+10);
 			} else {
 				// jQuery .animate fallback for browsers that don't support CSS transitions
@@ -410,7 +412,12 @@ var anime = (function($) {
 					queue: false,
 					duration: duration.jquery,
 					complete: function() {
-						$(this).css('position', 'static');
+						var that = $(this);
+						
+						that.css({
+							position: that.data('original-positioning'),
+							height: 'auto'
+						});
 					}
 				});
 			}
@@ -592,7 +599,7 @@ var anime = (function($) {
 		/**
 		* Slides in each child element alternatively between left and right.
 		*/
-		altSlide = function(parent, duration) {
+		zipperSlide = function(parent, duration) {
 			// Store dimensions we'll need for calculations
 			var parentWidth = parent.width(),
 				parentPadding = parseInt(parent.css('padding-left'), 10) * 2,
@@ -635,7 +642,7 @@ var anime = (function($) {
 		/**
 		* Slides the left column in from the bottom left, and the right column from the bottom right.
 		*/
-		twoColSlide = function(parent, duration) {
+		cornerSlide = function(parent, duration) {
 			// Store dimensions we'll need for calculations
 			var leftParentOffset = parent.position().left,
 				topOffset = $(window).height() + $(document).scrollTop();
@@ -667,17 +674,17 @@ var anime = (function($) {
 		
 		
 		/**
-		* Slides the sidebar in from the left.
+		* Slides the element in from the left.
 		*/
-		animatedSidebarIn = function(sidebar, duration) {
+			slideFromLeft = function(element, duration) {
 			// @TODO Things are all messed up for this in different browsers
-			sidebar = offsetElement(sidebar, {
-				top:  sidebar.position().top,
-				left: -sidebar.width()
+			element = offsetElement(element, {
+				top:  element.position().top,
+				left: -element.width()
 			});
 			
 			// Animate the elements
-			runAnimationOnElement(sidebar, duration);
+			runAnimationOnElement(element, duration);
 		},
 		
 		
@@ -694,18 +701,18 @@ var anime = (function($) {
 				// Two column grid animation
 				if (animeElement.hasClass('two-col')) {
 					if (win.width()> 959) {
-						twoColSlide(animeElement, {
+						cornerSlide(animeElement, {
 							css: 1000,
 							jquery: 850
 						});
 					} else {
-						altSlide(animeElement, {
+						zipperSlide(animeElement, {
 							css: 500,
 							jquery: 350
 						});
 					}
 				} else if (animeElement.hasClass('sidebar')) {
-					animatedSidebarIn(animeElement, {
+					slideFromLeft(animeElement, {
 						css: 750,
 						jquery: 750
 					});

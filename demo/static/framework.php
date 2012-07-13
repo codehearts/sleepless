@@ -1,6 +1,6 @@
 <?php
 
-function get_header($title, $body_class = '', $lang = 'en') {
+function get_header($title, $body_class = '', $content_class = '', $lang = 'en') {
 	require_once 'header.php';
 }
 
