@@ -55,4 +55,42 @@ var Box = function(args) {
 	}
 	
 	return box;
+},
+
+
+
+
+
+
+
+
+
+
+/**
+* Returns an origami-style element for injection into the DOM.
+*/
+Origami = function(args) {
+	var defaults = {
+			id:      '',
+			'class': '',
+			element: 'div',
+			content: '',
+			numeral: undefined,
+			caption: ''
+		},
+		args = $.extend(defaults, args),
+		
+		origami = $('<'+args.element+' class="origami" />').addClass(args.class).attr('id', args.id),
+		heading = $('<header class="origami-header" />').appendTo(origami),
+		footer  = $('<footer class="origami-footer" />').appendTo(origami),
+		
+		content = $('<div class="origami-content" />').text(args.content).appendTo(heading),
+		caption = $('<p class="origami-caption" />').text(args.caption).appendTo(footer);
+	
+	// Add the numeral, if specified
+	if (args.numeral !== undefined) {
+		content.prepend($('<p class="origami-num" />').text(args.numeral));
+	}
+	
+	return origami;
 };

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-15 22:14-0500\n"
+"POT-Creation-Date: 2012-07-16 16:51-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: static/js/main.min.js:2065
+#: static/js/main.min.js:2149
+#, c-format
+msgid ""
+"You have nothing to review today! If you want to review early, you will have "
+"%s card to study."
+msgid_plural ""
+"You have nothing to review today! If you want to review early, you will have "
+"%s cards to study."
+msgstr[0] ""
+msgstr[1] ""
+
+#: static/js/main.min.js:2160
 #, c-format
 msgid ""
 "You've already studied this deck for today. If you want to review early, you "
@@ -28,18 +39,18 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: static/js/main.min.js:2075
+#: static/js/main.min.js:2170
 #, c-format
 msgid "You have %s card to study today."
 msgid_plural "You have %s cards to study today."
 msgstr[0] "Du har %s kort för att studera idag."
 msgstr[1] "Du har %s kort att studera idag."
 
-#: static/js/main.min.js:2090
+#: static/js/main.min.js:2185
 msgid "%(checkbox)s Record your progress?"
 msgstr "%(checkbox)s Anteckna dina framsteg?"
 
-#: static/js/main.min.js:2091
+#: static/js/main.min.js:2186
 msgid ""
 "Sleepless can record your progress in this deck for next time. As a guest, "
 "your progress will not be available on other devices."
@@ -47,31 +58,35 @@ msgstr ""
 "Sleepless kan anteckna dina framsteg i detta däck till nästa gång. Som gäst "
 "kommer dina framsteg inte tillgänglig på andra anordningar."
 
-#: static/js/main.min.js:2269
+#: static/js/main.min.js:2358
 #, c-format
 msgid "%s day"
 msgid_plural "%s days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: static/js/main.min.js:2276
+#: static/js/main.min.js:2365
 #, c-format
 msgid "%s month"
 msgid_plural "%s months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: static/js/main.min.js:2283
+#: static/js/main.min.js:2372
 #, c-format
 msgid "%s year"
 msgid_plural "%s years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: static/js/main.min.js:2326
+#: static/js/main.min.js:2415
 msgid "Repeat"
 msgstr ""
 
-#: static/js/main.min.js:2329
+#: static/js/main.min.js:2418
 msgid "Review in"
+msgstr ""
+
+#: static/js/main.min.js:2602
+msgid "Tomorrow"
 msgstr ""

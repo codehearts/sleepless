@@ -9,6 +9,7 @@
 // @codekit-append "card_listing.js"
 // @codekit-append "launch.js"
 // @codekit-append "study.js"
+// @codekit-append "completion.js"
 
 
 
@@ -205,7 +206,8 @@ var Sleepless = (function($) {
 			var defaults = {
 					loadCards: true,
 					loadCardForecast: false,
-					upcomingLoadedCallback: false
+					upcomingLoadedCallback: false,
+					forceReview: false
 				},
 				
 				today         = new Date(),
@@ -279,98 +281,100 @@ var Sleepless = (function($) {
 			upcomingCardCount = data.deck.cardsPerSession; // The number of upcoming cards (used for determining which unstudied cards are coming up)
 			
 			// Unpack cards
-			for (var i = 1, len = dataArray.length+1; i < len; i++) {
-				cardString = dataArray[i-1];
-				
-				data.cards[i] = {
-					// First character is the date
-					reviewDate: unpackDate(cardString.charAt(0)),
-					
-					// The first 14 bits of the second character are the delay factor, the last 2 bits are booleans
-					delayFactor:    extractBits(cardString.charCodeAt(1), 16, 3),
-					reverseStudied: !!extractBits(cardString.charCodeAt(1), 2, 2),
-					studied:        !!extractBits(cardString.charCodeAt(1), 1, 1),
-					
-					// The last character is the delay factor for the reversed card
-					reverseDelayFactor: extractBits(cardString.charCodeAt(2), 16, 1)
-				};
-				
-				data.cards.count++; // Increment the number of cards in this deck
-				
-				// If this card has been studied, increment the number of studied cards
-				if (data.cards[i].studied) {
-					data.cards.studyCount++;
-				}
-				
-				
-				// Update the card forecast with this card
-				if (options.loadCardForecast) {
-					// If the closest review date to today hasn't been set, initialize it
-					if (!closestDate) {
-						closestDate = data.cards[i].reviewDate;
-					} else if (closestDate > data.cards[i].reviewDate) {
-						closestDate = data.cards[i].reviewDate;
-					}
-					
-					// If this card has been studied, check if it's upcoming or needs to be reviewed
-					if (data.cards[i].studied) {
-						timeDifference = (data.cards[i].reviewDate - today) / dayConversion; // Convert to days
-						
-						data.cards.forecast.studied.push(i); // Add this card's id to the list of studied cards
-						
-						// If its review date is today or in the past
-						if (timeDifference <= data.deck.timesStudiedToday - 1) {
-							data.cards.forecast.review.push(i);
-						// If it's review date is one day from now
-						} else if (timeDifference <= data.deck.timesStudiedToday) {
-							data.cards.forecast.upcoming.push(i);
-						}
-					} else {
-						// If the order isn't randomized and we should have unstudied cards coming up
-						if (!data.deck.randomize && upcomingCardCount) {
-							upcomingCardCount--; // This one's going to be added
-							
-							data.cards.forecast.upcoming.push(i); // Add this card to the forecast of upcoming cards
-						}
-					}
-				}
-			}
-			
-			// Determine whether all cards have been studied
-			if (data.cards.studyCount === data.cards.count) {
-				data.cards.allStudied = true;
-			}
-			
-			// @TODO Support for changelogs
-			
-			// Determine which cards are upcoming that have not been studied yet if the deck is in random order
-			if (options.loadCardForecast && data.deck.randomize && data.cards.count !== data.cards.studyCount) {
-				$.getJSON('/decks/'+deckID+'/cards/', {
-					total:   data.deck.cardsPerSession,
-					studied: encodeNumericArray(data.cards.forecast.studied),
-					randomize:     data.deck.randomize,
-					randomizeSeed: data.deck.randomizeSeed
-				}, function(cardsData) {
-					// Set the upcoming card ids based on the data we got back
-					$.each(cardsData, function(i, cardData) {
-						data.cards.forecast.upcoming.push(cardData[0]);
-					});
-					
-					// Run the callback for when upcoming card data is available
-					if (options.upcomingLoadedCallback) {
-						options.upcomingLoadedCallback(data);
-					}
-				});
-			} else if (options.upcomingLoadedCallback) {
-				// Run the callback for when upcoming card data is available
-				options.upcomingLoadedCallback(data);
-			}
-			
-			// If the user studied today and there are no review cards in the immediate future, find the closest review cards to today
-			if (data.deck.timesStudiedToday && !data.cards.studyCount && options.loadCardForecast && !data.cards.forecast.review.length) {
+			if (options.loadCards) {
 				for (var i = 1, len = dataArray.length+1; i < len; i++) {
-					if (data.cards[i].reviewDate.getTime() == closestDate.getTime()) {
-						data.cards.forecast.review.push(i);
+					cardString = dataArray[i-1];
+					
+					data.cards[i] = {
+						// First character is the date
+						reviewDate: unpackDate(cardString.charAt(0)),
+						
+						// The first 14 bits of the second character are the delay factor, the last 2 bits are booleans
+						delayFactor:    extractBits(cardString.charCodeAt(1), 16, 3),
+						reverseStudied: !!extractBits(cardString.charCodeAt(1), 2, 2),
+						studied:        !!extractBits(cardString.charCodeAt(1), 1, 1),
+						
+						// The last character is the delay factor for the reversed card
+						reverseDelayFactor: extractBits(cardString.charCodeAt(2), 16, 1)
+					};
+					
+					data.cards.count++; // Increment the number of cards in this deck
+					
+					// If this card has been studied, increment the number of studied cards
+					if (data.cards[i].studied) {
+						data.cards.studyCount++;
+					}
+					
+					
+					// Update the card forecast with this card
+					if (options.loadCardForecast) {
+						// If the closest review date to today hasn't been set, initialize it
+						if (!closestDate) {
+							closestDate = data.cards[i].reviewDate;
+						} else if (closestDate > data.cards[i].reviewDate) {
+							closestDate = data.cards[i].reviewDate;
+						}
+						
+						// If this card has been studied, check if it's upcoming or needs to be reviewed
+						if (data.cards[i].studied) {
+							timeDifference = (data.cards[i].reviewDate - today) / dayConversion; // Convert to days
+							
+							data.cards.forecast.studied.push(i); // Add this card's id to the list of studied cards
+							
+							// If its review date is today or in the past
+							if (timeDifference <= data.deck.timesStudiedToday - 1) {
+								data.cards.forecast.review.push(i);
+							// If it's review date is one day from now
+							} else if (timeDifference <= data.deck.timesStudiedToday) {
+								data.cards.forecast.upcoming.push(i);
+							}
+						} else {
+							// If the order isn't randomized and we should have unstudied cards coming up
+							if (!data.deck.randomize && upcomingCardCount) {
+								upcomingCardCount--; // This one's going to be added
+								
+								data.cards.forecast.upcoming.push(i); // Add this card to the forecast of upcoming cards
+							}
+						}
+					}
+				}
+				
+				// Determine whether all cards have been studied
+				if (data.cards.studyCount === data.cards.count) {
+					data.cards.allStudied = true;
+				}
+				
+				// @TODO Support for changelogs
+				
+				// Determine which cards are upcoming that have not been studied yet if the deck is in random order
+				if (options.loadCardForecast && data.deck.randomize && data.cards.count !== data.cards.studyCount) {
+					$.getJSON('/decks/'+deckID+'/cards/', {
+						total:   data.deck.cardsPerSession,
+						studied: encodeNumericArray(data.cards.forecast.studied),
+						randomize:     data.deck.randomize,
+						randomizeSeed: data.deck.randomizeSeed
+					}, function(cardsData) {
+						// Set the upcoming card ids based on the data we got back
+						$.each(cardsData, function(i, cardData) {
+							data.cards.forecast.upcoming.push(cardData[0]);
+						});
+						
+						// Run the callback for when upcoming card data is available
+						if (options.upcomingLoadedCallback) {
+							options.upcomingLoadedCallback(data);
+						}
+					});
+				} else if (options.upcomingLoadedCallback) {
+					// Run the callback for when upcoming card data is available
+					options.upcomingLoadedCallback(data);
+				}
+				
+				// If the user studied today and there are no review cards in the immediate future, find the closest review cards to today
+				if ((data.deck.timesStudiedToday || options.forceReview) && data.cards.allStudied && options.loadCardForecast && !data.cards.forecast.review.length) {
+					for (var i = 1, len = dataArray.length+1; i < len; i++) {
+						if (data.cards[i].reviewDate.getTime() == closestDate.getTime()) {
+							data.cards.forecast.review.push(i);
+						}
 					}
 				}
 			}
@@ -530,6 +534,46 @@ var Sleepless = (function($) {
 			}
 		});
 	});
+	
+	
+	
+	// If the user clicks a study button anchor and they have progress saved, convert it to a form to preserve their settings
+	if (storageSet) {
+		body.on('click', 'a.study-btn', function(e) {
+			var button   = $(this),
+				progress = loadProgress(button.attr('data-deck-id')),
+				deck,
+				dataForm;
+			
+			// Only do anything if the user has progress saved for this deck
+			if (progress) {
+				e.preventDefault();
+				
+				deck = progress.deck;
+				dataForm = $('<form method="POST" />').attr(
+								'action', button.attr('href')
+							).append(
+								$('<input name="cards-per-session" value="'+deck.cardsPerSession+'" />')
+							).append(
+								$('<input type="checkbox" name="use-time" />').prop('checked', deck.useTime)
+							).append(
+								$('<input name="time-limit" value="'+deck.timeLimit+'" />')
+							).append(
+								$('<input type="checkbox" name="randomize" />').prop('checked', deck.randomize)
+							).append(
+								$('<input type="checkbox" name="use-reverse" />').prop('checked', deck.reversed)
+							).append(
+								$('<input name="randomize-seed" value="'+deck.randomizeSeed+'" />')
+							).append(
+								$('input[name=csrfmiddlewaretoken]').clone()
+							).hide().appendTo(
+								body
+							).submit();
+			}
+		});
+	}
+	
+	
 	
 	
 	body.on('click', '.page-transition-button', function(e) {

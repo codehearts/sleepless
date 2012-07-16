@@ -19,7 +19,7 @@ class Deck(models.Model):
 	f_template = models.TextField('Front Template')
 	b_template = models.TextField('Back Template')
 	# @TODO Reversed card templates
-	# @TODO Public/private field
+	# @TODO Public/private deck field
 	
 	def __unicode__(self):
 		return self.name

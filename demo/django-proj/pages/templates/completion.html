@@ -3,11 +3,10 @@
 
 {% block content %}
 	<header class="six-col pad right-align desc-hd" id="completion-header">
-	{# @TODO If time was up, offer to let the user continue studying anyway #}
 	{% if time_up %}
-		<h1>{% trans 'Time’s Up.' %}</h1>
+		<h1 class="deck-id" id="deck-{{deck.id}}">{% trans 'Time’s Up.' %}</h1>
 	{% else %}
-		<h1>{{heading}}</h1>
+		<h1 class="deck-id" id="deck-{{deck.id}}">{{heading}}</h1>
 	{% endif %}
 		<p class="desc-shd">
 			{% trans 'Return to Deck' as deck_link_title %}
@@ -44,17 +43,6 @@
 				<p class="origami-caption">{% trans 'Today' %}</p>
 			</footer>
 		</li>
-		<!-- @TODO This requires JS -->
-		<!--<li class="origami upcoming" id="completion-cards-tomorrow">
-			<header class="origami-header">
-				<div class="origami-content">
-					<p class="origami-num">2047</p>
-				</div>
-			</header>
-			<footer class="origami-footer">
-				<p class="origami-caption">{% trans 'Tomorrow' %}</p>
-			</footer>
-		</li>-->
 	</ul>
 	
 	<ul class="six-col pad right-align" id="completion-links">

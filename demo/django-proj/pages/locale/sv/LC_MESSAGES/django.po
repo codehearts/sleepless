@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-15 22:12-0500\n"
+"POT-Creation-Date: 2012-07-16 16:51-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,37 +22,33 @@ msgstr ""
 msgid "Cards in %(deck_name)s"
 msgstr "Kort i %(deck_name)s"
 
-#: templates/completion.html:8
+#: templates/completion.html:7
 msgid "Time’s Up."
 msgstr "Tiden är Ute"
 
-#: templates/completion.html:13 templates/completion.html.py:61
+#: templates/completion.html:12 templates/completion.html.py:49
 msgid "Return to Deck"
 msgstr "Återgå till Däck"
 
-#: templates/completion.html:18
+#: templates/completion.html:17
 #, python-format
 msgid "Your time limit has expired for %(deck_name)s. You deserve a break!"
 msgstr "Din tid har löpt ut för %(deck_name)s. Du förtjänar en paus!"
 
-#: templates/completion.html:20
+#: templates/completion.html:19
 #, python-format
 msgid "You've finished studying %(deck_name)s for today."
 msgstr "Du har avslutat sina studier %(deck_name)s för idag."
 
-#: templates/completion.html:34
+#: templates/completion.html:33
 msgid "Time"
 msgstr "Tid"
 
-#: templates/completion.html:44
+#: templates/completion.html:43
 msgid "Today"
 msgstr "Idag"
 
-#: templates/completion.html:55
-msgid "Tomorrow"
-msgstr "I Morgon"
-
-#: templates/completion.html:62
+#: templates/completion.html:50
 msgid "Return Home"
 msgstr "Återvända Hem"
 
@@ -206,6 +202,9 @@ msgstr "Nice Work!"
 #: views/study.py:132
 msgid "Studying Complete"
 msgstr "Studera Fullständig"
+
+#~ msgid "Tomorrow"
+#~ msgstr "I Morgon"
 
 #~ msgid "%(checkbox)s Record your progress?"
 #~ msgstr "%(checkbox)s Anteckna dina framsteg?"

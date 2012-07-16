@@ -139,14 +139,14 @@
 				
 				
 				// Load our progress in this deck
-				progress = Sleepless.loadProgress(deckID, {loadCardForecast: true});
+				progress = Sleepless.loadProgress(deckID, {loadCardForecast: true, forceReview: true});
 			
 			
 			
 			// If progress hasn't been saved yet, initialize it
 			if (progress === undefined) {
 				Sleepless.saveProgress(Sleepless.initializeProgress(deckID, cardCount));
-				progress = Sleepless.loadProgress(deckID, {loadCardForecast: true});
+				progress = Sleepless.loadProgress(deckID, {loadCardForecast: true, forceReview: true});
 			}
 			
 			// Update the options for this deck

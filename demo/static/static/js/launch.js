@@ -11,7 +11,6 @@
 			jsHookClone = hooks.jsStudyOptions.clone(),
 			
 			fields = {
-				offset:         $('<input type="hidden" name="offset" />'),
 				randomizeSeed:  $('<input type="hidden" name="randomize-seed" />'),
 				cardCount:      hooks.staticStudyOptions.find('input[name=cards-per-session]'),
 				recordProgress: undefined,
@@ -33,7 +32,21 @@
 				
 				cardCount += reviewCount;
 				
-				if (progress && progress.deck.lastStudied === 'today') {
+				if (cardCount === 0) {
+					// If there are no cards to study for today, we'll want to focus on the number of early review cards
+					cardCount = Sleepless.loadProgress(deckID, {loadCardForecast: true, forceReview: true}).cards.forecast.review.length;
+					
+					fields.cardForecast.text(
+						interpolate(
+							ngettext(
+								"You have nothing to review today! If you want to review early, you will have %s card to study.",
+								"You have nothing to review today! If you want to review early, you will have %s cards to study.",
+								cardCount
+							),
+							[cardCount]
+						)
+					);
+				} else if (progress && progress.deck.lastStudied === 'today') {
 					fields.cardForecast.text(
 						interpolate(
 							ngettext(
@@ -84,31 +97,25 @@
 		} else {
 			progress = Sleepless.loadProgress(deckID, {loadCardForecast: true});
 			
-			// Update the number of cards to review today
-			reviewCount = progress.cards.forecast.review.length;
-			
-			// Set the offset to the number of cards that have been studied
-			fields.offset.val(progress.cards.studyCount).appendTo(jsHookClone);
-			
-			// Set the randomize seed to the user's for this deck
-			fields.randomizeSeed.val(progress.deck.randomizeSeed).appendTo(jsHookClone);
-			
-			// Change the values in the form fields according to the stored data
-			hooks.staticStudyOptions.find('input[name=cards-per-session]').val(progress.deck.cardsPerSession);
-			hooks.staticStudyOptions.find('input[name=time-limit]').val(progress.deck.timeLimit);
-			if (progress.deck.useTime) {
-				hooks.staticStudyOptions.find('input[name=use-time]').prop('checked', true);
-			}
-			if (progress.deck.randomize) {
-				hooks.staticStudyOptions.find('input[name=randomize]').prop('checked', true);
-			}
-			if (progress.deck.reversed) {
-				hooks.staticStudyOptions.find('input[name=use-reverse]').prop('checked', true);
-			}
-			
-			// Remove new card options if there are no new cards
-			if (progress.cards.allStudied) {
-				hooks.staticStudyOptions.find('input[name=cards-per-session]').parent().remove();
+			// Check if progress has been set for this deck
+			if (progress !== undefined) {
+				// Update the number of cards to review today
+				reviewCount = progress.cards.forecast.review.length;
+				
+				// Set the randomize seed to the user's for this deck
+				fields.randomizeSeed.val(progress.deck.randomizeSeed).appendTo(jsHookClone);
+				
+				// Change the values in the form fields according to the stored data
+				hooks.staticStudyOptions.find('input[name=cards-per-session]').val(progress.deck.cardsPerSession);
+				hooks.staticStudyOptions.find('input[name=time-limit]').val(progress.deck.timeLimit);
+				hooks.staticStudyOptions.find('input[name=use-time]').prop('checked', progress.deck.useTime);
+				hooks.staticStudyOptions.find('input[name=randomize]').prop('checked', progress.deck.randomize);
+				hooks.staticStudyOptions.find('input[name=use-reverse]').prop('checked', progress.deck.reversed);
+				
+				// Remove new card options if there are no new cards
+				if (progress.cards.allStudied) {
+					hooks.staticStudyOptions.find('input[name=cards-per-session]').parent().remove();
+				}
 			}
 		}
 		
