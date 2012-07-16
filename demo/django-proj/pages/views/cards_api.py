@@ -1,6 +1,6 @@
 import json, random
 from config import *
-from ..util import card_count_of
+from ..util import card_count_of, decode_numeric_query_string
 
 # @TODO Do nothing if this deck is not public
 def cards_api(request, deck_id):
@@ -9,11 +9,14 @@ def cards_api(request, deck_id):
 	
 	# Get the specified parameters
 	total   = int(request.GET.get('total', card_count)) # Number of cards to return
-	offset  = int(request.GET.get('offset', 0)) # Number of cards to offset by
+	studied = request.GET.get('studied', False) # Cards that have already been studied
 	include = request.GET.get('include', []) # Additional cards to include (useful for review cards)
-	randomized     = bool(request.GET.get('randomize', False)) # Whether to randomize
+	randomized     = request.GET.get('randomize', '') # Whether to randomize
 	randomize_seed = int(request.GET.get('randomizeSeed', -1)) # The randomizer seed
 	
+	# Handle false values for whether or not we should randomize
+	if randomized.lower() == 'false':
+		randomized = False
 	
 	
 	# Limit the number of cards to return by the total number in the deck
@@ -21,25 +24,38 @@ def cards_api(request, deck_id):
 		total = card_count
 	
 	
-	# If we're randomizing
+	all_card_ids = range(1, card_count+1) # Every card id in the deck
+	card_ids = [] # The unstudied card ids we'll be returning
+	
+	# Convert our query string of studied cards to a list of studied card ids
+	if studied:
+		studied = decode_numeric_query_string(studied)
+	
+	# If we're randomizing, shuffle the list of all card ids
 	if randomized:
-		card_ids = range(1, card_count+1)
-		
 		# If a seed was provided, seed the random number generator
 		if randomize_seed != -1:
 			random.seed(randomize_seed)
 		
-		random.shuffle(card_ids) # Shuffle the card order
-		card_ids = card_ids[offset:offset+total] # Offset the values by our card offset value
-	# Otherwise just return an ordered list
-	else:
-		card_ids = range(offset+1, offset+total+1)
+		random.shuffle(all_card_ids) # Shuffle the card order
+	
+	# Loop through all cards ids until we find enough that have not been studied
+	for id in all_card_ids:
+		# If this card hasn't been studied, add it to our list
+		if not studied or not id in studied:
+			card_ids.append(id)
+		
+		# If we've found enough unstudied cards, stop looping
+		if len(card_ids) == total:
+			break
 	
 	
 	# If there are cards to be included...
 	if include:
-		include = map(int, include.split(',')) # Converted the card ids from a string to a list of integers
-		random.shuffle(include) # Shuffle the order of our review cards
+		include = decode_numeric_query_string(include) # Converted the card ids from a string to a list of integers
+		
+		if randomized:
+			random.shuffle(include) # Shuffle the order of our review cards
 		
 		# Add the review cards to the list of cards to return
 		card_ids += include
@@ -54,16 +70,17 @@ def cards_api(request, deck_id):
 	# Generate the card data
 	card_data = []
 	for id in card_ids:
-		card = cards.get(order=id)
-		
-		card_data.append([
-			escape(card.order),
-			{
-				'front': escape(card.front),
-				'back':  escape(card.back),
-				'extra': escape(card.extra)
-			}
-		])
+		if id <= card_count:
+			card = cards.get(order=id)
+			
+			card_data.append([
+				escape(card.order),
+				{
+					'front': escape(card.front),
+					'back':  escape(card.back),
+					'extra': escape(card.extra)
+				}
+			])
 	
 	
 	

@@ -40,8 +40,11 @@
 		<div class="three-col-cell right-align" id="js-study-options"></div>
 		
 		<div class="three-col-cell pad option-group" id="static-study-options">
+			{# @TODO Remove this field if there are no new cards in this deck #}
 			<label class="small-text-option">
-			{%blocktrans with '<input type="number" min="0" max="'|add:'1274'|add:'" name="cards-per-session" value="20" />' as numeric_box%}{{numeric_box}} new cards to study{%endblocktrans%}
+			{% with max_attr=card_count|stringformat:'s' value_attr=cards_per_session|stringformat:'s' %}
+			{%blocktrans with '<input type="number" min="1" max="'|add:max_attr|add:'" name="cards-per-session" value="'|add:value_attr|add:'" />'|safe as numeric_box %}{{numeric_box}} new cards to study{%endblocktrans%}
+			{% endwith %}
 			</label>
 			<!-- @TODO Requires JS -->
 			<!--<label class="sub-option checkbox-option">
@@ -59,7 +62,8 @@
 			{%blocktrans with '<input type="checkbox" name="randomize" />' as checkbox%}{{checkbox}} Randomize order{%endblocktrans%}
 			</label>
 			
-			<label class="checkbox-option">
+			{# @TODO Implement this #}
+			<label class="checkbox-option" style="display:none;">
 			{%blocktrans with '<input type="checkbox" name="use-reverse" />' as checkbox%}{{checkbox}} Include reversed cards{%endblocktrans%}
 			</label>
 		</div>

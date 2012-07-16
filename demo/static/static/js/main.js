@@ -6,6 +6,7 @@
 // @codekit-prepend "anime.js"
 // @codekit-prepend "jquery.inview.js"
 
+// @codekit-append "card_listing.js"
 // @codekit-append "launch.js"
 // @codekit-append "study.js"
 
@@ -23,9 +24,56 @@ var Sleepless = (function($) {
 		
 		
 		
-		
+		/**
+		* Converts a boolean value to an integer representation of that value (1 if true, 0 if false).
+		* @param boolean bool The boolean value.
+		* @return int Either 1 or 0.
+		*/
 		boolToInt = function(bool) {
 			return bool ? 1 : 0;
+		},
+		
+		/**
+		* Determines whether the given date is today
+		* @param Date date A date object to check if is today.
+		* @return bool True if the date is today, false otherwise.
+		*/
+		isToday = function(date) {
+			var today = new Date();
+			
+			return (date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate());
+		},
+		
+		/**
+		* Converts an array of integer values into a query string of those values.
+		* Example output for [1,2,3,4,5,7,8,9,11,12,14] would be: "1-5,7-9,11-12,14"
+		* @param array arr The array of integer values.
+		* @return string The string of values.
+		*/
+		encodeNumericArray = function(arr) {
+			var queryString,
+				len,
+				i = 1; // The first value is added to the query string before we loop
+			
+			// If the array is not actually an array, or it is empty, return an empty string
+			if (!$.isArray(arr) || arr.length === 0) {
+				return '';
+			}
+			
+			len = arr.length;
+			arr.sort(function(a,b) {return a - b;}); // Ensure the array is sorted in numerical order
+			queryString = arr[0] + ''; // Convert to string
+			
+			for (; i < len; i++) {
+				// If this value is at the end of a range (ex: the 3 in [1,2,3,15])
+				if (arr[i-1] === arr[i] - 1 && (i+1 === len || arr[i] !== arr[i+1] - 1)) {
+					queryString += '-'+arr[i];
+				} else if (arr[i-1] !== arr[i] - 1) {
+					queryString += ','+arr[i];
+				}
+			}
+			
+			return queryString;
 		},
 		
 		// Storage Methods
@@ -118,8 +166,8 @@ var Sleepless = (function($) {
 			// First 3 characters are deck data
 			deckString  = packDate(deck.lastStudyDate);
 			deckString += pack(
-				[Math.min(Math.max(deck.cardsPerSession, 0), 500), 9], // limit 500
-				[Math.min(Math.max(deck.timeLimit, 0), 120), 7] // Limit 120
+				[Math.min(Math.max(deck.cardsPerSession, 1), 500), 9], // limit 500
+				[Math.min(Math.max(deck.timeLimit, 1), 120), 7] // Limit 120
 			);
 			deckString += pack(
 				[Math.min(Math.max(deck.randomizeSeed, 0), Math.pow(2, 13)-1), 13], // Limit 2^13 - 1
@@ -127,6 +175,7 @@ var Sleepless = (function($) {
 				[boolToInt(deck.randomize), 1],
 				[boolToInt(deck.useTime), 1]
 			);
+			deckString += pack([parseInt(deck.timesStudiedToday, 10), 16]);
 			
 			for (card_id in cards) {
 				if (cards.hasOwnProperty(card_id) && $.isNumeric(card_id)) {
@@ -149,18 +198,21 @@ var Sleepless = (function($) {
 		/**
 		* Loads the deck data from client-side storage, or returns undefined if the deck was never saved.
 		* @param int deckID The id of the deck to load data for.
-		* @param object options Optiosn that determine how much data will be processed and returned. Possible options are loadCards and loadCardForecast. The last one will add an extra property to the returned object, data.cards.forecast, which contain these arrays of card IDs: review, upcoming.
-		* @return object The loaded data in the format {id: deckID, deck: {deckDataField: deckData, ...}, cards: {order: {cardDataField: cardData, ...}}}. data.cards also contains a studyCount property with the number of cards studied.
+		* @param object options Optiosn that determine how much data will be processed and returned. Possible options are loadCards, loadCardForecast, upcomingLoadedCallback. loadCardForecast will add an extra property to the returned object, data.cards.forecast, which contain these arrays of card IDs: studied, review, upcoming. upcomingLoadedCallback is a callback for when the upcoming forecast is loaded (yes, it can take time if the deck order is randomized)
+		* @return object The loaded data in the format {id: deckID, deck: {deckDataField: deckData, ...}, cards: {order: {cardDataField: cardData, ...}}}. data.cards also contains a count, studyCount, and allStudied property with the total number of cards and studied cards, and whether all of the cards have been studied or not.
 		*/
 		loadProgress = function(deckID, options) {
 			var defaults = {
 					loadCards: true,
-					loadCardForecast: false
+					loadCardForecast: false,
+					upcomingLoadedCallback: false
 				},
 				
 				today         = new Date(),
-				dayConversion = 1000 / 60 / 60 / 24,
+				dayConversion = 1000 * 60 * 60 * 24,
 				timeDifference,
+				upcomingCardCount,
+				closestDate = false, // Used to determine the closest review date to today
 				
 				storedData = amplify.store(deckID),
 				
@@ -168,7 +220,9 @@ var Sleepless = (function($) {
 					id:    deckID,
 					deck:  {},
 					cards: {
-						studyCount: 0
+						count:      0,
+						studyCount: 0,
+						allStudied: false,
 					}
 				},
 				
@@ -180,7 +234,8 @@ var Sleepless = (function($) {
 			
 			if (options.loadCardForecast) {
 				data.cards.forecast = {
-					review:  [],
+					studied:  [],
+					review:   [],
 					upcoming: []
 				};
 			}
@@ -192,11 +247,11 @@ var Sleepless = (function($) {
 				return undefined;
 			}
 			
-			// Split the data string into an array of 3-character long strings (all stored item use 3 characters each)
-			dataArray = storedData.match(/.{3}/g);
+			// Split the data string into an array of 3-character long strings starting after the fourth character (cards use 3 characters each, the deck uses the first 4)
+			dataArray = storedData.substring(4).match(/[^]{3}/g);
 			
 			// Get the deck data
-			deckString = dataArray.shift();
+			deckString = storedData.substr(0, 4);
 			
 			// First character is the date
 			data.deck.lastStudyDate = unpackDate(deckString.charAt(0));
@@ -210,6 +265,18 @@ var Sleepless = (function($) {
 			data.deck.reversed      = !!extractBits(deckString.charCodeAt(2), 3, 3);
 			data.deck.randomize     = !!extractBits(deckString.charCodeAt(2), 2, 2);
 			data.deck.useTime       = !!extractBits(deckString.charCodeAt(2), 1, 1);
+			data.deck.timesStudiedToday = extractBits(deckString.charCodeAt(3), 16, 1);
+			
+			// Generate a string dictating the last time this deck was studied
+			if (isToday(data.deck.lastStudyDate)) {
+				data.deck.lastStudied = 'today';
+			} else {
+				data.deck.lastStudied = 'past';
+				data.deck.timesStudiedToday = 0;
+			}
+			
+			
+			upcomingCardCount = data.deck.cardsPerSession; // The number of upcoming cards (used for determining which unstudied cards are coming up)
 			
 			// Unpack cards
 			for (var i = 1, len = dataArray.length+1; i < len; i++) {
@@ -228,22 +295,82 @@ var Sleepless = (function($) {
 					reverseDelayFactor: extractBits(cardString.charCodeAt(2), 16, 1)
 				};
 				
+				data.cards.count++; // Increment the number of cards in this deck
+				
 				// If this card has been studied, increment the number of studied cards
 				if (data.cards[i].studied) {
 					data.cards.studyCount++;
 				}
 				
-				// @TODO This doesn't handle reversed cards
-				// If we need to load the card forecast and this card has been studied, check if it's upcoming or needs to be reviewed
-				if (options.loadCardForecast && data.cards[i].studied) {
-					timeDifference = (data.cards[i].reviewDate - today) / dayConversion; // Convert to days
+				
+				// Update the card forecast with this card
+				if (options.loadCardForecast) {
+					// If the closest review date to today hasn't been set, initialize it
+					if (!closestDate) {
+						closestDate = data.cards[i].reviewDate;
+					} else if (closestDate > data.cards[i].reviewDate) {
+						closestDate = data.cards[i].reviewDate;
+					}
 					
-					// If its review date is today or in the past
-					if (timeDifference <= 1) {
+					// If this card has been studied, check if it's upcoming or needs to be reviewed
+					if (data.cards[i].studied) {
+						timeDifference = (data.cards[i].reviewDate - today) / dayConversion; // Convert to days
+						
+						data.cards.forecast.studied.push(i); // Add this card's id to the list of studied cards
+						
+						// If its review date is today or in the past
+						if (timeDifference <= data.deck.timesStudiedToday - 1) {
+							data.cards.forecast.review.push(i);
+						// If it's review date is one day from now
+						} else if (timeDifference <= data.deck.timesStudiedToday) {
+							data.cards.forecast.upcoming.push(i);
+						}
+					} else {
+						// If the order isn't randomized and we should have unstudied cards coming up
+						if (!data.deck.randomize && upcomingCardCount) {
+							upcomingCardCount--; // This one's going to be added
+							
+							data.cards.forecast.upcoming.push(i); // Add this card to the forecast of upcoming cards
+						}
+					}
+				}
+			}
+			
+			// Determine whether all cards have been studied
+			if (data.cards.studyCount === data.cards.count) {
+				data.cards.allStudied = true;
+			}
+			
+			// @TODO Support for changelogs
+			
+			// Determine which cards are upcoming that have not been studied yet if the deck is in random order
+			if (options.loadCardForecast && data.deck.randomize && data.cards.count !== data.cards.studyCount) {
+				$.getJSON('/decks/'+deckID+'/cards/', {
+					total:   data.deck.cardsPerSession,
+					studied: encodeNumericArray(data.cards.forecast.studied),
+					randomize:     data.deck.randomize,
+					randomizeSeed: data.deck.randomizeSeed
+				}, function(cardsData) {
+					// Set the upcoming card ids based on the data we got back
+					$.each(cardsData, function(i, cardData) {
+						data.cards.forecast.upcoming.push(cardData[0]);
+					});
+					
+					// Run the callback for when upcoming card data is available
+					if (options.upcomingLoadedCallback) {
+						options.upcomingLoadedCallback(data);
+					}
+				});
+			} else if (options.upcomingLoadedCallback) {
+				// Run the callback for when upcoming card data is available
+				options.upcomingLoadedCallback(data);
+			}
+			
+			// If the user studied today and there are no review cards in the immediate future, find the closest review cards to today
+			if (data.deck.timesStudiedToday && !data.cards.studyCount && options.loadCardForecast && !data.cards.forecast.review.length) {
+				for (var i = 1, len = dataArray.length+1; i < len; i++) {
+					if (data.cards[i].reviewDate.getTime() == closestDate.getTime()) {
 						data.cards.forecast.review.push(i);
-					// If it's review date is one day from now
-					} else if (timeDifference > 1 && timeDiffernece < 2) {
-						data.cards.forecast.upcoming.push(i);
 					}
 				}
 			}
@@ -261,7 +388,6 @@ var Sleepless = (function($) {
 			var now = new Date(),
 				dataField,
 				deckData = {
-					// @TODO We only need to do this for the first deck ever stored, though.
 					// The last time this deck was studied (initially a month in the past to prevent possible issues)
 					lastStudyDate: 0,
 					
@@ -271,7 +397,8 @@ var Sleepless = (function($) {
 					reversed: 0,
 					randomize: 0,
 					useTime: 0,
-					randomizeSeed: Math.floor(Math.random() * (Math.pow(2, 13))) // Random number between 0 and 2^13 - 1
+					randomizeSeed: Math.max(Math.floor(Math.random() * (Math.pow(2, 13))), 1), // Random number between 1 and 2^13 - 1
+					timesStudiedToday: 0
 				};
 			
 			now.setMonth(now.getMonth() - 1);
@@ -470,7 +597,11 @@ var Sleepless = (function($) {
 		// Properties
 		storageSet: storageSet,
 		
+		
 		// Methods
+		isToday:            isToday,
+		encodeNumericArray: encodeNumericArray,
+		
 		initializeProgress: initializeProgress,
 		saveProgress: saveProgress,
 		loadProgress: loadProgress

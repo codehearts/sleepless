@@ -38,8 +38,7 @@ def study(request, author, deck_slug):
 	
 	# Get and initialize our study options and data
 	
-	# Get the number of cards to offset by and the randomize seed (these are only set if JS is available)
-	card_offset    = int(request.POST.get('offset', 0))
+	# Get the randomize seed (these are only set if JS is available)
 	randomize_seed = int(request.POST.get('randomize-seed', -1))
 	
 	# Get the start time and time options
@@ -48,6 +47,7 @@ def study(request, author, deck_slug):
 	time_limit = float(request.POST.get('time-limit', 0))
 	
 	# Get the rest of the study options
+	cards_per_session = request.POST.get('cards-per-session', 20)
 	randomized   = request.POST.get('randomize', '') # Boolean friendly string
 	random_queue = request.POST.get('random-queue')
 	use_reverse  = request.POST.get('use-reverse', '') # Boolean friendly string
@@ -63,7 +63,7 @@ def study(request, author, deck_slug):
 	
 	current_item = int(request.POST.get('current-item', 0))
 	last_item    = int(request.POST.get('last-item', request.POST.get('cards-per-session', 20))) # Total number of cards to study in this session
-	order = int(request.POST.get('order', card_offset + 1)) # The card we're currently displaying
+	order = int(request.POST.get('order', 1)) # The card we're currently displaying
 	
 	# Limit the number of cards to study by the total number in the deck
 	if last_item > card_count:
@@ -80,7 +80,6 @@ def study(request, author, deck_slug):
 			random.seed(randomize_seed)
 		
 		random.shuffle(random_queue) # Shuffle the card order
-		random_queue = random_queue[card_offset:] # Offset the values by our card offset value
 		
 		order = random_queue.pop()
 	
@@ -95,7 +94,7 @@ def study(request, author, deck_slug):
 	# Check for conditions that would terminate the study session
 	
 	# The session ended if the current card is also the last card and we have no cards to repeat
-	session_ended = current_item == last_item and not repeat_queue
+	session_ended = current_item >= last_item and not repeat_queue
 	# Whether or not time is up
 	# @TODO Don't end the session on a time out if the user hasn't seen the answer to this card yet
 	# @TODO This is an absolute mess, converting time strings into datetime objects and back and forth
@@ -104,7 +103,7 @@ def study(request, author, deck_slug):
 	
 	
 	# If the only thing left in the session is repeat cards, use the cards from the repeat queue
-	if current_item == last_item and repeat_queue:
+	if current_item >= last_item and repeat_queue:
 		# If we need to show a new card...
 		if show_next_card:
 			# ...get the value of that card's order, but don't remove it from the queue
@@ -205,6 +204,7 @@ def study(request, author, deck_slug):
 		
 		'time_taken': time_taken,
 		
+		'cards_per_session': cards_per_session,
 		'start_time':   start_time,
 		'use_time':     use_time,
 		'time_limit':   time_limit,

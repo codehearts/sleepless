@@ -25,14 +25,33 @@
 			progress,
 			
 			
-			updateCardForecast = function(cardCount) {
-				// @TODO This message should be different if the user has already studied this deck today
-				fields.cardForecast.text(
-					interpolate(
-						ngettext('You have %s card to study today.', 'You have %s cards to study today.', cardCount),
-						[cardCount]
-					)
-				);
+			updateCardForecast = function(cardCount, reviewCount) {
+				// If the user is at the end of the deck, this will make the number of new cards to study equal to the number of new cards actually in the deck
+				if (progress !== undefined) {
+					cardCount = Math.min(cardCount, progress.cards.count - progress.cards.studyCount);
+				}
+				
+				cardCount += reviewCount;
+				
+				if (progress && progress.deck.lastStudied === 'today') {
+					fields.cardForecast.text(
+						interpolate(
+							ngettext(
+								"You've already studied this deck for today. If you want to review early, you will have %s card to study.",
+								"You've already studied this deck for today. If you want to review early, you will have %s cards to study.",
+								cardCount
+							),
+							[cardCount]
+						)
+					);
+				} else {
+					fields.cardForecast.text(
+						interpolate(
+							ngettext('You have %s card to study today.', 'You have %s cards to study today.', cardCount),
+							[cardCount]
+						)
+					);
+				}
 			};
 		
 		
@@ -78,13 +97,18 @@
 			hooks.staticStudyOptions.find('input[name=cards-per-session]').val(progress.deck.cardsPerSession);
 			hooks.staticStudyOptions.find('input[name=time-limit]').val(progress.deck.timeLimit);
 			if (progress.deck.useTime) {
-				hooks.staticStudyOptions.find('input[name=use-time]').attr('checked');
+				hooks.staticStudyOptions.find('input[name=use-time]').prop('checked', true);
 			}
 			if (progress.deck.randomize) {
-				hooks.staticStudyOptions.find('input[name=randomize]').attr('checked');
+				hooks.staticStudyOptions.find('input[name=randomize]').prop('checked', true);
 			}
 			if (progress.deck.reversed) {
-				hooks.staticStudyOptions.find('input[name=use-reverse]').attr('checked');
+				hooks.staticStudyOptions.find('input[name=use-reverse]').prop('checked', true);
+			}
+			
+			// Remove new card options if there are no new cards
+			if (progress.cards.allStudied) {
+				hooks.staticStudyOptions.find('input[name=cards-per-session]').parent().remove();
 			}
 		}
 		
@@ -96,9 +120,9 @@
 		// @TODO We need to handle cases where the user exits part way through the session and comes back the same day or another day
 		// @TODO Only call this whenever fields.cardCount is updated if this deck hasn't been studied today
 		// Display the card forecast for this deck and update it whenever the number of new cards to study is changed
-		updateCardForecast(reviewCount + parseInt(fields.cardCount.val(), 10));
+		updateCardForecast(parseInt(fields.cardCount.val(), 10), reviewCount);
 		fields.cardCount.on('keyup change', function() {
-			updateCardForecast(reviewCount + parseInt(fields.cardCount.val(), 10));
+			updateCardForecast(parseInt(fields.cardCount.val(), 10), reviewCount);
 		});
 		
 		hooks.jsStudyOptions.replaceWith(jsHookClone);

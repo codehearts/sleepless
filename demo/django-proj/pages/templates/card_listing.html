@@ -3,11 +3,11 @@
 {% load card_template_parser %}
 
 {% block content %}
-	<h1 class="pad">{%blocktrans with deck.name as deck_name%}Cards in {{deck_name}}{%endblocktrans%}</h1>
+	<h1 class="pad deck-id" id="deck-{{deck.id}}">{%blocktrans with deck.name as deck_name%}Cards in {{deck_name}}{%endblocktrans%}</h1>
 	{% if cards %}
 	<ol class="grid two-col animate">
 	{% for card in cards %}
-		<li class="paper card">
+		<li class="paper card" id="card-{{card.order}}">
 			<div class="card-front">
 				{% for template in deck.f_template|parse_card_template_fields %}
 				{% with card|parse_card_template:template as card %}

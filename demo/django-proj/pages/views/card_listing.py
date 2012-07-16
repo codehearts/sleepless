@@ -12,6 +12,8 @@ def card_listing(request, author, deck_slug):
 	return render_to_response('card_listing.html', {
 		'title': _('Cards in %(deck_name)s') % {'deck_name': escape(deck.name)} + SEPARATOR + SITE_TITLE,
 		
+		'body_class': 'card-listing',
+		
 		'back_to_deck': True,
 		
 		'deck':  deck,

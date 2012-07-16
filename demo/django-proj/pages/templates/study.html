@@ -36,6 +36,7 @@
 {%localize off%}{{ time_limit }}{%endlocalize%}" />
 			<input type="hidden" name="randomize" value="{{ randomize }}" />
 			<input type="hidden" name="use-reverse" value="{{ use_reverse }}" />
+			<input type="hidden" name="cards-per-session" value="{{ cards_per_session }}" />
 			
 			<input type="hidden" name="order" value="{{ card.order }}" />
 			<input type="hidden" name="current-item" value="{{ current_item }}" />
@@ -61,7 +62,7 @@
 		<!-- @TODO How important is this, anyway? -->
 		<!-- @TODO We could show this value after a question has been answered, however -->
 		<!-- <span class="study-status-item study-time">0:07</span> -->
-		<span class="study-status-item study-progress"><span class="current-item">{{current_item}}</span>/{{last_item}}</span>
+		<span class="study-status-item study-progress"><span class="current-item">{{current_item}}</span>/<span class="last-item">{{last_item}}</span></span>
 		{% if repeat_queue %}
 		<span class="study-status-item study-repeats">{{repeat_queue|length}}</span>
 		{% endif %}

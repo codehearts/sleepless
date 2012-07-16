@@ -33,11 +33,13 @@
 					
 					// Form elements
 					currentItem: form.find('input[name=current-item]'),
+					lastItem:    form.find('input[name=last-item]'),
 					
 					// Status elements
 					status: {
 						container:   $('.study-status'),
 						currentItem: $('.study-progress .current-item'),
+						lastItem:    $('.study-progress .last-item'),
 						repeatCount: $('.study-repeats')
 					}
 				},
@@ -123,6 +125,7 @@
 				},
 				
 				
+				startTime   = new Date().getTime() / 1000,
 				currentItem = 0,
 				lastItem    = 20,
 				repeatQueue = [],
@@ -147,13 +150,13 @@
 			}
 			
 			// Update the options for this deck
-			progress.deck.useTime    = form.find('input[name=use-time]').val();
+			progress.deck.useTime    = !!form.find('input[name=use-time]').val();
 			progress.deck.timeLimit  = parseInt(form.find('input[name=time-limit]').val(), 10) / 60;
-			progress.deck.randomize  = form.find('input[name=randomize]').val();
-			progress.deck.useReverse = form.find('input[name=use-reverse]').val();
-			progress.deck.cardsPerSession = parseInt(form.find('input[name=last-item]').val(), 10);
-
-			// @TODO Set the deck's study date to today
+			progress.deck.randomize  = !!form.find('input[name=randomize]').val();
+			progress.deck.useReverse = !!form.find('input[name=use-reverse]').val();
+			progress.deck.cardsPerSession = parseInt(form.find('input[name=cards-per-session]').val(), 10);
+			progress.deck.timesStudiedToday++;
+			progress.deck.lastStudyDate = new Date(); // Set the last study date to today
 			
 			Sleepless.saveProgress(progress); // Save changes to the user's progress
 			
@@ -182,20 +185,27 @@
 			
 			
 			
-			// Set up our session variables
-			lastItem = progress.deck.cardsPerSession;
-			
+			// Hide pertinent UI elements until our card data loads in
+			elements.status.container.hide();
+			elements.card.front.hide();
+			elements.showAnswer.hide();
 			
 			
 			// Fetch the card data we'll need for this session
 			$.getJSON('/decks/'+deckID+'/cards/', {
 				total:   progress.deck.cardsPerSession,
-				offset:  progress.cards.studyCount,
-				include: progress.cards.forecast.review.join(','),
+				studied: Sleepless.encodeNumericArray(progress.cards.forecast.studied),
+				include: Sleepless.encodeNumericArray(progress.cards.forecast.review),
 				randomize:     progress.deck.randomize,
 				randomizeSeed: progress.deck.randomizeSeed
 			}, function(data) {
 				cards = data
+				
+				
+				// Set up our session variables
+				lastItem = data.length;
+				elements.status.lastItem.text(lastItem);
+				elements.lastItem.val(lastItem);
 				
 				
 				// @TODO Write a method for this
@@ -203,6 +213,10 @@
 				currentCardID = cards[0][0]; // First item is the card's order in the deck
 				currentCard = cards[0][1]; // Second item is a hash of card data
 				updateCardFields(currentCard);
+				
+				elements.status.container.show();
+				elements.card.front.show(); // Show the front of the current card
+				elements.showAnswer.show(); // Show the "show answer" button
 				
 				
 				// Show the other side of the card
@@ -277,15 +291,20 @@
 					}
 					
 					
+					// Save our progress
+					Sleepless.saveProgress(progress);
 					
-					// @TODO Save progress
 					
+					// If the time limit is up, submit the form
+					if (progress.deck.useTime && (new Date().getTime() / 1000 - startTime) / 60 >= progress.deck.timeLimit) {
+						form.submit();
+						return;
+					}
 					
-					
-					// @TODO Time limit!
 					// If this is the last item and we don't have a repeat queue, submit the form
 					if (currentItem === lastItem && !repeatQueue.length) {
 						form.submit();
+						return;
 					}
 					
 					

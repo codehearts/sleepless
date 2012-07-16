@@ -131,8 +131,8 @@ var anime = (function($) {
 					left = position.left;
 				}
 				
-				// Create a placeholder element to hold the space previously occupied by this element
-				childClone.clone().insertAfter(childClone).css('visbility', 'hidden').addClass('animation-space-placeholder');
+				// Create a placeholder element to hold the space previously occupied by this element (the placeholder has its id removed)
+				childClone.clone().insertAfter(childClone).css('visbility', 'hidden').addClass('animation-space-placeholder').attr('id', '');
 				
 				childClone.css({
 					position: 'absolute', // position: absolute; must be set here, or else .position() will not work a few lines up from this one
