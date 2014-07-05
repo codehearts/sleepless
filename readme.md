@@ -5,5 +5,5 @@ Technologies used:
 - Django
 - HTML/Jinja templating
 - CSS/Less
-- JavaScript/jQuery
+- JavaScript/jQuery (the js wound up being a mess as I rushed to finish it before the end of summer)
 - Local Storage
