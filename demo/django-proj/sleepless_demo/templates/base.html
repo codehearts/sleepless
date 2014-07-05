@@ -77,7 +77,7 @@
 	<script>!window.jQuery && document.write(unescape('%3Cscript src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"%3E%3C/script%3E'))</script>
 	{# @TODO Simple author page #}
 	{# @TODO Look into including more URLs this way #}
-	<script type="text/javascript" src="{% url django.views.i18n.javascript_catalog %}"></script>
+	<script type="text/javascript" src="{% url "django.views.i18n.javascript_catalog" %}"></script>
 	{% block extra_scripts %}{% endblock %}
 	<script src="{{ STATIC_URL }}js/main.min.js"></script>
 </body>

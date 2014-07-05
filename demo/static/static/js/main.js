@@ -147,7 +147,7 @@ var Sleepless = (function($) {
 			// 4 bits for months, 5 bits for days, 7 bits for years
 			
 			return new Date(year, month, day);
-		}
+		},
 		
 		
 		
