@@ -1,0 +1,39 @@
+#launch-header {
+	&> h1 {
+		background: none;
+		margin-top: 0;
+		margin-left: 0;
+		padding-top: 0;
+		padding-left: 0;
+		position: static;
+	}
+}
+
+#launch-sidebar {
+	&> li> .origami {
+		margin-left: -20px;
+		
+		&> .origami-header {
+			position: relative;
+			top: 0;
+			left: 0;
+			max-height: 220px;
+			max-width: 220px;
+		}
+		
+		&> .origami-footer> .origami-caption {
+			margin: 0 0 0 13px;
+		}
+	}
+	
+	&> li:nth-child(n) {
+		float: none;
+		clear: none;
+	}
+}
+
+#launch-form {
+	.input-btn {
+		margin: 25px 0 50px 5px;
+	}
+}

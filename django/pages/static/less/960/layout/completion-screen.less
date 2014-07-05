@@ -1,0 +1,26 @@
+#completion-sidebar.sidebar {
+	&> .origami {
+		width: 200px;
+	}
+	
+	&> #completion-cards-today,
+	&> #completion-cards-tomorrow {
+		float: none;
+		width: 200px;
+		
+		&> .origami-header> .origami-content {
+			padding-right: 10px;
+			padding-left: 10px;
+		}
+	}
+}
+
+#completion-links {
+	&> li {
+		float: left;
+		
+		&:first-child {
+			margin-right: 40px;
+		}
+	}
+}

@@ -1,0 +1,141 @@
+#toolbar {
+	background: rgba(255,255,255,0.35);
+	margin: 0 0 10px;
+	padding-bottom: 10px;
+	height: 70px;
+}
+
+#masthead {
+	position: relative;
+	z-index: 10000;
+	
+	&> .back-btn {
+		margin: 7px 10px 0 20/320*100%;
+		float: left;
+	}
+}
+
+#main-branding {
+	margin: 0;
+	padding: 10px 10/320*100% 0;
+	
+	&> a {
+		margin: 0 0 10px;
+		float: left;
+		line-height: 23px;
+	}
+}
+
+.home-page.initial {
+	#toolbar {
+		.animation(white-fade-in 2s ease-out);
+	}
+	
+	#masthead {
+		.animation(slide-in 1s ease);
+	}
+}
+
+
+
+@-webkit-keyframes slide-in {
+	from {
+		top: -80px;
+	}
+    
+	to {
+		top: 0;
+	}
+}
+
+@-moz-keyframes slide-in {
+	from {
+		top: -80px;
+	}
+    
+	to {
+		top: 0;
+	}
+}
+
+@-ms-keyframes slide-in {
+	from {
+		top: -80px;
+	}
+    
+	to {
+		top: 0;
+	}
+}
+
+@-o-keyframes slide-in {
+	from {
+		top: -80px;
+	}
+    
+	to {
+		top: 0;
+	}
+}
+
+@keyframes slide-in {
+	from {
+		top: -80px;
+	}
+    
+	to {
+		top: 0;
+	}
+}
+
+
+
+@-webkit-keyframes white-fade-in {
+	from {
+		background: rgba(255,255,255,0);
+	}
+    
+	to {
+		background: rgba(255,255,255,0.35);
+	}
+}
+
+@-moz-keyframes white-fade-in {
+	from {
+		background: rgba(255,255,255,0);
+	}
+    
+	to {
+		background: rgba(255,255,255,0.35);
+	}
+}
+
+@-ms-keyframes white-fade-in {
+	from {
+		background: rgba(255,255,255,0);
+	}
+    
+	to {
+		background: rgba(255,255,255,0.35);
+	}
+}
+
+@-o-keyframes white-fade-in {
+	from {
+		background: rgba(255,255,255,0);
+	}
+    
+	to {
+		background: rgba(255,255,255,0.35);
+	}
+}
+
+@keyframes white-fade-in {
+	from {
+		background: rgba(255,255,255,0);
+	}
+    
+	to {
+		background: rgba(255,255,255,0.35);
+	}
+}

@@ -1,0 +1,135 @@
+.btn {
+	background-color: @light_grey;
+	border: 0 solid @light_grey;
+	.transition(all 0.2s ease);
+	.transition_property(background-color~',' border-color~',' color);
+	padding: 0 10px;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	.s-font-size;
+	font-weight: bold;
+	line-height: 28px;
+	color: @grey;
+	vertical-align: middle;
+	height: 28px;
+	min-width: 60px;
+	
+	&:hover, &:focus {
+		text-decoration: none;
+		color: @dark_grey;
+	}
+}
+
+
+
+.large-btn {
+	.transition_duration(0.225s);
+	padding: 0 14px;
+	.font_size(28);
+	line-height: 50px;
+	height: 50px;
+}
+
+
+
+.mega-btn {
+	.transition_duration(0.3s);
+	padding: 0 30px;
+	.l4-font-size;
+	line-height: 80px;
+	font-weight: normal;
+	height: 80px;
+}
+
+
+
+.full-btn {
+	.transition_duration(0.3s);
+	padding: 12px 0;
+	.l4-font-size;
+	font-weight: normal;
+	height: 36px;
+	width: 100%;
+}
+
+
+
+.go-btn {
+	margin-right: 14px;
+	padding-right: 7px;
+	
+	&:before {
+		border: 14px solid transparent;
+		border-left-color: inherit;
+		content: '';
+		position: absolute;
+		top: 0;
+		right: -28px;
+	}
+	
+	&.large-btn:before {
+		border-width: 25px;
+		right: -50px;
+	}
+}
+
+.back-btn {
+	margin-left: 14px;
+	padding-left: 7px;
+	
+	&:before {
+		border: 14px solid transparent;
+		border-right-color: inherit;
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -28px;
+		height: 0;
+		width: 0;
+	}
+	
+	&.large-btn:before {
+		border-width: 25px;
+		left: -50px;
+	}
+}
+
+.cancel-btn {
+	&:hover, &:focus {
+		background-color: @red;
+		border-color: @red;
+		color: #fff;
+	}
+}
+
+.bad-btn {
+	background-color: @red;
+	color: #fff;
+	
+	&:hover, &:focus {
+		background: @dark_grey;
+		color: #fff;
+	}
+}
+
+.good-btn {
+	background-color: @green;
+	color: @dark_grey;
+	
+	&:hover, &:focus {
+		background: @dark_grey;
+		color: #fff;
+	}
+}
+
+
+
+/* IE Fixes */
+
+.lt-ie8 {
+	.btn {
+		.ie7_inline_block;
+		overflow: visible; /* Fixes a problem where buttons become narrower than their text contents */
+	}
+}

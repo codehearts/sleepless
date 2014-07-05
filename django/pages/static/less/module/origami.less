@@ -1,0 +1,101 @@
+@origami-corner-radius: 7px;
+
+.origami {
+	margin: 0 0 20px;
+	width: 100%;
+}
+
+.origami-header {
+	 .paper-grey-background;
+	border: 0 solid darken(@light_grey, 20%);
+	border-top-left-radius: @origami-corner-radius;
+	position: relative;
+	color: @dark_grey;
+	
+	&:before, &:after {
+		content: '';
+		position: absolute;
+		left: 0;
+	}
+	
+	&:before {
+		border-style: inherit;
+		border-color: transparent;
+		border-top-color: inherit;
+		border-width: 12px;
+		bottom: -24px;
+		z-index: 1;
+	}
+	
+	&:after {
+		.linear_gradient(left~',' rgba(255,255,255,0.25) 0%~',' rgba(255,255,255,0) 6px);
+		.paper_box_shadow;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 3;
+	}
+}
+
+.origami-image {
+	border-top-left-radius: @origami-corner-radius;
+	display: block;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+.origami-content {
+	padding: 5px 5/310*100% 10px;
+	position: relative;
+	overflow: auto;
+	z-index: 4;
+	
+	&> a {
+		color: @dark_grey;
+	}
+}
+
+.origami-hd {
+	margin: 0;
+	.hyphens(auto);
+	.l2-font-size;
+}
+
+.origami-bd {
+	margin: 0;
+	display: inline;
+}
+
+.origami-num {
+	margin: 5px 0 0;
+	.l4-font-size;
+	font-weight: normal;
+}
+
+.origami-footer {
+	overflow: hidden;
+	
+	&> .go-btn {
+		margin-top: 10px;
+		margin-bottom: 10px;
+		float: right;
+	}
+}
+
+.origami-caption {
+	background: #fff;
+	margin: 0 0 0 13px;
+	padding-top: 12px;
+	padding-left: 6px;
+	float: left;
+	position: relative;
+	z-index: 2;
+	
+	&> a {
+		padding-bottom: 10px; /* Assists our friends on touch devices */
+	}
+}
+
+h1.origami-caption {
+	padding-top: 0;
+}

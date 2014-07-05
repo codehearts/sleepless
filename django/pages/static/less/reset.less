@@ -1,0 +1,124 @@
+.sel() { background: @dark_grey; text-shadow: none; color: #fff; }
+::-moz-selection { .sel; }
+::selection      { .sel; }
+
+html, body, ul, ol, form, input, textarea, header, section, footer {
+	margin: 0;
+	padding: 0;
+}
+
+html, body, textarea, input, button {
+	font: normal @base_font_size~'/'21px @sans_serif;
+	color: @grey;
+}
+
+
+
+html, body {
+	background: #fff;
+	min-height: 100%;
+}
+
+html {
+	overflow-y: scroll;
+	height: 100%;
+}
+
+body {
+	.hardware-accelerate;
+	.transition(background-position 1s ease);
+}
+
+#wrap,
+#old-wrap {
+	.hardware-accelerate;
+	.transition(all 0.75s ease);
+	.transition_property(opacity~',' height);
+	
+	&.study-page {
+		position: absolute;
+		top: 40px;
+		bottom: 68px;
+		width: 100%;
+	}
+	
+	&:after {
+		content: '';
+		display: block;
+		clear: both;
+		line-height: 0;
+		visibility: hidden;
+		height: 0;
+	}
+}
+
+.home-page {
+	background: #fff url('../images/background/mural.png') center 100px no-repeat;
+	
+	.js & {
+		background-position: center -500px;
+	}
+}
+
+
+
+a {
+	text-decoration: none;
+	color: @dark_grey;
+	
+	&:hover, &:focus {
+		text-decoration: underline;
+	}
+}
+
+code {
+	white-space: pre-wrap;
+}
+
+input, button, textarea {
+	background: rgba(255,255,255,.25);
+	border: 1px solid @grey;
+	border-radius: 0;
+	
+	&:focus {
+		background: rgba(255,255,255,.5);
+		border-color: @dark_grey;
+		outline: none;
+		color: @dark_grey;
+	}
+}
+
+input {
+	&[type=text] {
+		-webkit-appearance: none;
+	}
+	
+	&[type=submit] {
+		-webkit-appearance: none;
+		.transition(all 0.2s ease);
+		cursor: pointer;
+	}
+}
+
+button {
+	-webkit-appearance: none;
+	cursor: pointer;
+}
+
+
+
+.no-transition {
+	.transition(none ~'!important');
+}
+
+.hide {
+	position: absolute !important;
+	top: -9999px !important;
+	right: auto !important;
+	bottom: auto !important;
+	left: -9999px !important;
+}
+
+.remove {
+	display: none !important;
+}

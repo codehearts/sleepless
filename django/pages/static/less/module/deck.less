@@ -1,0 +1,43 @@
+.deck> .origami-header {
+	&> .origami-content {
+		max-height: 105px; /* 105px because there are scrollbars with 100px on Windows */
+	}
+}
+
+.upcoming> .origami-header,
+.discovery-deck> .origami-header {
+	.paper-blue-background;
+	border-color: darken(@blue, 15%);
+	color: darken(@blue, 45%);
+	
+	&> .origami-content {
+		&> a {
+			color: darken(@blue, 45%);
+		}
+		
+		&> .origami-num {
+			color: #fff;
+		}
+	}
+}
+
+.deck-see-more {
+	margin: 0 0 0 0.5ex;
+	display: inline-block;
+	text-decoration: underline;
+	white-space: nowrap;
+	
+	&:hover, &:focus {
+		text-decoration: none;
+	}
+}
+
+
+
+/* IE Fixes */
+
+.lt-ie8 {
+	.deck-see-more {
+		.ie7_inline_block;
+	}
+}

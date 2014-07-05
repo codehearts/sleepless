@@ -1,0 +1,144 @@
+@base_font_size: 18px;
+
+@he_sans:  'Arial Hebrew';
+@he_serif: 'New Peninim MT';
+@jp_sans:  'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro W3', 'Meiryo', 'メイリオ', 'Osaka', 'MS PGothic', 'ＭＳ Ｐゴシック';
+@jp_serif: 'Hiragino Mincho Pro', 'MS Mincho';
+
+@sans_serif: 'Helvetica Neue', Arial, Helvetica, @jp_sans, @he_sans, 'Arial Unicode', sans-serif;
+@serif: Georgia, Palatino, 'Palatino Linotype', @jp_serif, @he_serif, Times, 'Times New Roman', serif;
+
+.serif {
+	font-family: @serif;
+}
+
+
+
+.rtl {
+	direction: rtl;
+}
+
+.center-text {
+	text-align: center;
+}
+
+
+
+h1 {
+	margin: 0 0 30px;
+	.font_size(30);
+	line-height: 30px;
+	color: @dark_grey;
+}
+
+h2 {
+	margin: 0 0 28px;
+	.l2-font-size;
+	color: @dark_grey;
+}
+
+p {
+	margin: 0 0 @base_font_size;
+}
+
+
+
+.l7-font-size() {
+	.font_size(72);
+	line-height: 64px;
+}
+
+.l6-font-size() {
+	.font_size(60);
+	line-height: 60px;
+}
+
+.l5-font-size() {
+	.font_size(48);
+	line-height: 48px;
+}
+
+.l4-font-size() {
+	.font_size(36);
+	line-height: 36px;
+}
+
+.l3-font-size() {
+	.font_size(28);
+	line-height: 32px;
+}
+
+.l2-font-size() {
+	.font_size(24);
+	line-height: 28px;
+}
+
+.l-font-size() {
+	.font_size(21);
+	line-height: 28px;
+}
+
+.b-font-size() { /* base font size */
+	.font_size(18);
+	line-height: 21px;
+}
+
+.m-font-size() {
+	.font_size(16);
+	line-height: 21px;
+}
+
+.s-font-size() {
+	.font_size(14);
+	line-height: 18px;
+}
+
+
+
+.pt-72 {
+	.l7-font-size;
+}
+
+.pt-60 {
+	.l6-font-size;
+}
+
+.pt-48 {
+	.l5-font-size;
+}
+
+.pt-36 {
+	.l4-font-size;
+}
+
+.pt-24 {
+	.l2-font-size;
+}
+
+.pt-21 {
+	.l-font-size;
+}
+
+.pt-18 {
+	.b-font-size;
+}
+
+.pt-14 {
+	.s-font-size;
+}
+
+
+
+.subhead {
+	.l2-font-size;
+}
+
+.l-text {
+	margin-bottom: 28px;
+	.l-font-size;
+}
+
+.s-text {
+	margin-bottom: 18px;
+	.s-font-size;
+}

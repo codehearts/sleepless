@@ -1,0 +1,62 @@
+.options,
+.option-group {
+	list-style: none;
+	
+	&> .sub-option {
+		margin-top: -10px;
+		margin-left: 20px;
+	}
+}
+
+.option-text,
+.options label {
+	margin-bottom: 20px;
+	float: left;
+	clear: left;
+}
+
+.small-text-option {
+	padding-left: 3.9em;
+	text-indent: -3.9em;
+	
+	&> input {
+		text-align: right;
+		width: 3.5em;
+	}
+}
+
+.checkbox-option {
+	padding-left: 15px;
+	text-indent: -15px;
+	
+	&> input {
+		margin: 0;
+		padding: 0;
+		position: relative;
+		top: -4px;
+		vertical-align: bottom;
+		height: 15px;
+		width: 15px;
+	}
+}
+
+
+
+/* IE Fixes */
+
+.lt-ie8 {
+	.option-text,
+	.options label {
+		display: block;
+		float: none;
+	}
+	
+	.small-text-option {
+		padding-left: 0;
+	}
+	
+	.radio-option,
+	.checkbox-option {
+		overflow: hidden;
+	}
+}
