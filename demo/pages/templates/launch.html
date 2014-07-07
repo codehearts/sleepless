@@ -17,14 +17,15 @@
 				<div class="origami-footer">
 					<p class="origami-caption">
 						{% with deck.author.name|slugify as author_slug %}
-						{% blocktrans with request.get_host|add:'/author/'|add:author_slug|add:'/' as author_url and deck.author.name as author_name %}By <a href="{{ author_url }}" title="See more decks by {{ author_name }}">{{ author_name }}</a>{% endblocktrans %}
+						{% url "home" as home_url %}
+						{% blocktrans with home_url|add:'author/'|add:author_slug|add:'/' as author_url and deck.author.name as author_name %}By <a href="{{ author_url }}" title="See more decks by {{ author_name }}">{{ author_name }}</a>{% endblocktrans %}
 						{% endwith %}
 					</p>
 				</div>
 			</div>
 		</li>
 		<li>
-			<a href="{% url "home" %}/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/cards/" class="card-count" title="{% trans "See all cards in this deck" %}">
+			<a href="{% url "home" %}author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/cards/" class="card-count" title="{% trans "See all cards in this deck" %}">
 			{%blocktrans count card_count as card_count%}{{card_count}} card{%plural%}{{card_count}} cards{%endblocktrans%}
 			</a>
 		</li>

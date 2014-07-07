@@ -10,9 +10,10 @@
 	{% endif %}
 		<p class="desc-shd">
 			{% trans 'Return to Deck' as deck_link_title %}
+			{% url "home" as home_url %}
 			{% with deck.author.name|slugify as author_slug and deck.name as deck_name %}
-			{% with request.get_host|add:'/author/'|add:author_slug|add:'/deck/'|add:deck.slug|add:'/' as deck_url %}
-			{% with '<a href="'|add:request.get_host|add:deck_url|add:'" title="'|add:deck_link_title|add:'">'|add:deck_name|add:'</a>'|safe as deck_name %}
+			{% with home_url|add:'author/'|add:author_slug|add:'/deck/'|add:deck.slug|add:'/' as deck_url %}
+			{% with '<a href="'|add:home_url|add:deck_url|add:'" title="'|add:deck_link_title|add:'">'|add:deck_name|add:'</a>'|safe as deck_name %}
 				{% if time_up %}
 					{% blocktrans %}Your time limit has expired for {{deck_name}}. You deserve a break!{% endblocktrans %}
 				{% else %}
@@ -46,7 +47,7 @@
 	</ul>
 	
 	<ul class="six-col pad right-align" id="completion-links">
-		<li><a href="{% url "home" %}/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/" class="btn full-btn">{% trans 'Return to Deck' %}</a></li>
+		<li><a href="{% url "home" %}author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/" class="btn full-btn">{% trans 'Return to Deck' %}</a></li>
 		<li><a href="{% url "home" %}" class="btn full-btn home-link">{% trans 'Return Home' %}</a></li>
 	</ul>
 {% endblock %}
