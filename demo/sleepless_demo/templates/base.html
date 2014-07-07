@@ -31,20 +31,20 @@
 	<div id="toolbar" class="{{toolbar_class}}">
 		<header id="masthead">
 			{% if back_to_deck %}
-			<a href="/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/" class="btn back-btn">{% trans "Back to Deck" %}</a>
+			<a href="author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/" class="btn back-btn">{% trans "Back to Deck" %}</a>
 			{% endif %}
 			
 			{% if cancel_back_to_deck %}
-			<a href="/author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/" class="btn back-btn cancel-btn">{% trans "Back to Deck" %}</a>
+			<a href="author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/" class="btn back-btn cancel-btn">{% trans "Back to Deck" %}</a>
 			{% endif %}
 			
 			{% if minimalist_menubar %}
 				{% block menubar %}{% endblock %}
 			{% else %}
-			<h1 id="main-branding"><a href="/" class="logotype home-link">Sleepless</a></h1>
+			<h1 id="main-branding"><a href="{% url "home" %}" class="logotype home-link">Sleepless</a></h1>
 			
 {# @TODO Rewrite search URLs to go from search/?for=query to just search/query/ #}
-			<form method="get" action="/search/" class="combo-field" id="search">
+			<form method="get" action="search/" class="combo-field" id="search">
 				<input type="submit" value="{% trans "Search Decks" %}" class="btn combo-field-btn" />
 				<span class="combo-field-wrap"><input type="text" name="for" tabindex="1" class="combo-field-text" value="{{search_query}}" /></span>
 			</form>
@@ -60,7 +60,7 @@
 			&copy; <a href="http://iamnatehart.com">Nate Hart</a> &mdash;
 			{% trans 'Change Language:' %}
 		</p>
-		<form action="/i18n/setlang/" method="post" id="language-form">
+		<form action="i18n/setlang/" method="post" id="language-form">
 			{% csrf_token %}
 			<input name="next" type="hidden" value="{{ request.get_full_path }}" />
 			
