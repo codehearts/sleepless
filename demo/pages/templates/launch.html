@@ -32,7 +32,7 @@
 		{# @TODO Tell the user if this deck is using storage, allow them to clear their progress for this deck #}
 	</ul>
 	
-	<form method="post" action="author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/study/" class="options six-col right-align" id="launch-form">
+	<form method="post" action="{% url "home" %}author/{{deck.author.name|slugify}}/deck/{{deck.slug}}/study/" class="options six-col right-align" id="launch-form">
 		{% csrf_token %}
 		<button type="submit" class="btn large-btn go-btn" name="start-studying">{% trans "Start Studying" %}</button>
 		{# @TODO These fields should be validated #}
