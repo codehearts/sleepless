@@ -192,7 +192,7 @@
 			
 			
 			// Fetch the card data we'll need for this session
-			$.getJSON('/decks/'+deckID+'/cards/', {
+			$.getJSON($('#main-branding > a').attr('href')+'decks/'+deckID+'/cards/', {
 				total:   progress.deck.cardsPerSession,
 				studied: Sleepless.encodeNumericArray(progress.cards.forecast.studied),
 				include: Sleepless.encodeNumericArray(progress.cards.forecast.review),
