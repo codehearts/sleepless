@@ -7,3 +7,6 @@ Technologies used:
 - CSS/Less
 - JavaScript/jQuery (the js wound up being a mess as I rushed to finish it before the end of summer)
 - Local Storage
+
+### Online Demo
+I've put the demo online at [http://iamnatehart.com/sleepless/demo/](http://iamnatehart.com/sleepless/demo/). It's missing author pages (which weren't really planned) and only seems to let you study if you opt in for data storage. If you clear your local storage after using it you'll be good, and any cookies set will expire when you end your browsing session.
