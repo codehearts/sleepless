@@ -1,7 +1,7 @@
 # Amateur Swedish Sleepless Demo translation
 # Copyright (C) 2012
 # This file is distributed under the same license as the page package.
-# Nate Hart <nate@iamnatehart.com>, 2012.
+# Kate Hart <kate@katehart.me>, 2012.
 #
 msgid ""
 msgstr ""
